@@ -24,14 +24,16 @@ puts "Running in Working Directory: #{$working_directory}"
 
 #create our directory structure here
 
-TagsDir            =   "#{WorkingDirectory}tag_lists/"
-ContentDir         =   "#{WorkingDirectory}content/"
-BioSummaryDir      =   "#{ContentDir}bio/summary/"
-BioDirectory       =   "#{WorkingDirectory}bio/"
-LogsDir            =   "#{WorkingDirectory}logs/"
-PacketDirectory    =   "#{WorkingDirectory}packets/"
-CaptchaDirectory   =   "#{WorkingDirectory}captchas/"
-HTMLDirectory      =   "#{WorkingDirectory}html/"
+TagsDir               =   "#{WorkingDirectory}tag_lists/"
+ContentDir            =   "#{WorkingDirectory}content/"
+BioSummaryDir         =   "#{ContentDir}bio/summary/"
+BioDirectory          =   "#{WorkingDirectory}bio/"
+LogsDir               =   "#{WorkingDirectory}logs/"
+PacketDirectory       =   "#{WorkingDirectory}packets/"
+CaptchaDirectory      =   "#{WorkingDirectory}captchas/"
+HTMLDirectory         =   "#{WorkingDirectory}html/"
+ScreenShotDirectory   =   "#{WorkingDirectory}screenshots/"
+
 
 create_dir( WorkingDirectory )
 create_dir( TagsDir )
@@ -41,6 +43,7 @@ create_dir( CaptchaDirectory )
 create_dir( LogsDir )
 create_dir( ContentDir )
 create_dir( HTMLDirectory )
+create_dir( ScreenShotDirectory )
 
 #our Constants
 require 'botter_constants'

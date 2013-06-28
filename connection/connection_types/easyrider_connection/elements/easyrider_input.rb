@@ -1,5 +1,2 @@
 
 
-class EasyriderInput < DefaultForm
-
-end

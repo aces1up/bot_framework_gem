@@ -4,6 +4,7 @@ class Connection
     include LogHandler
     include Enviornment
     include ArgsHelper
+    include ElementWrapper
 
     attr_accessor :use_local_proxy
 
@@ -163,8 +164,19 @@ class Connection
         raise NotImplementedError
     end
 
+    def current_connection_type()
+        #return current connection type as string
+        self.class.to_s.gsub('Connection','')
+    end
+
     def method_missing( method, *args)
-        @conn.respond_to?( method ) ? @conn.send( method, *args ) : super
+
+        if @conn.respond_to?( method )
+            warn("Non Implemented Connection Running Method: #{method.inspect} -- Obj: #{self.obj_info}")
+            wrap( @conn.send( method, *args ), method )
+        else
+            super
+        end
     end
 
 end

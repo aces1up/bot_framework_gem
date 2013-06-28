@@ -81,3 +81,8 @@ def alert_pop( message, title=nil )
     title = "LinkWheel Bandit Alert!" if !title
     javax.swing.JOptionPane.show_message_dialog(nil, message, title, javax.swing.JOptionPane::DEFAULT_OPTION)
 end
+
+def alert_pop_err( err, msg=nil )
+    msg_str ||= "Error: "
+    alert_pop("#{msg_str} #{err.message}\n#{err.backtrace.join("\n")}")
+end

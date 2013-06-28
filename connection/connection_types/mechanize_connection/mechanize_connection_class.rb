@@ -6,7 +6,7 @@ class MechanizeConnection < Connection
 
         super( args )
 
-        @conn ||= Mechanize.new
+        @conn             ||= Mechanize.new
 	      @conn.verify_mode  = OpenSSL::SSL::VERIFY_NONE
         @conn.keep_alive   = false     
         @conn.open_timeout = 10

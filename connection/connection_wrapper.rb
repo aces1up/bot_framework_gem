@@ -54,9 +54,8 @@ module ConnectionWrapper
         Thread.current[:conns][@agent_var]
     end
 
-    def current_connection_type( ret_symbol=true )
-        klass = current_connector.class.to_s.gsub('Connection','').downcase
-        ret_symbol ? klass.to_sym : klass
+    def current_connection_type()
+        current_connector.class.to_s.gsub('Connection','')
     end
 
     def request_count()

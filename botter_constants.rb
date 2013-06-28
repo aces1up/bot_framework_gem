@@ -40,7 +40,7 @@ FetchMethods      = [ :get, :post, :put, :submit ]  #<--- these are the methods
 
 # lists of methods that we wrap the resulting objects in our
 # elements based on connection used.
-WrapElementMethods = [ :fetch_form, :forms, :find ]
+WrapElementMethods = [ :fetch_form, :forms, :find, :root_element, :children_for_element ]
 
 #Var Mediator Constants
 DefaultVarConatainers = [ :acct, :site, :temp ]

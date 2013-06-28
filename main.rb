@@ -49,7 +49,7 @@ class LoginTest
     include BotFrameWorkModules
 
      def initialize()
-        @connection_class = EasyRiderConnection
+        @connection_class = EasyriderConnection
      end
 
      def test()
@@ -59,20 +59,21 @@ class LoginTest
         get('http://www.weebly.com/')
         #forms
         #puts html
-        puts "current: #{current_connection_handle.obj_info}"
-
-        element = current_connection_handle.conn.input(:id, 'weebly-name')
-        puts "exact = #{element.exists?.inspect}"
-        puts element.inspect
+ 
 
         #element = current_connection_handle.conn.input(:id, /-name/)
         #puts "broad = #{element.exists?.inspect}"
         #puts element.html
         #puts element.html
         #puts element.length
-        found = find( nil, :xpath, '//div' )
+        found = find( :div, :id, 'signup-inputs' )
         puts found.obj_info
         puts found.inspect
+
+        eles = found.children_for_element
+        eles.each do |ele|
+            puts ele.tag_name
+        end
         
      end
 end

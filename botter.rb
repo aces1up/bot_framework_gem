@@ -66,11 +66,13 @@ require 'connection/conn_mediator/connection_mediator'
 #mech connections
 require 'connection/connection_types/mechanize_connection/mechanize_connection_class'
 #mech Elements
+require 'connection/connection_types/mechanize_connection/elements/mechanize_default_element'
 require 'connection/connection_types/mechanize_connection/elements/mechanize_form'
 
 #easy Rider Connection
 require 'connection/connection_types/easyrider_connection/easyrider_connection_class'
 #easy rider elements
+require 'connection/connection_types/easyrider_connection/elements/easyrider_default_element'
 require 'connection/connection_types/easyrider_connection/elements/easyrider_input'
 
 

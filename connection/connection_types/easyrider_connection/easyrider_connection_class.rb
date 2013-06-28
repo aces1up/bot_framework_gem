@@ -1,12 +1,12 @@
 
 
-class EasyRiderConnection < Connection
+class EasyriderConnection < Connection
 
     def initialize( args={} )
 
         super( args )
 
-        @conn ||= EasyRider.new
+        @conn ||= EasyRider.new()
 
     end
 
