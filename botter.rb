@@ -4,6 +4,7 @@ puts "Current Run Directory: #{Dir.pwd}"
 
 #require 'rubygems'
 require 'mechanize'
+require 'easy_rider'
 require 'singleton'
 require 'thread_safe'
 require 'yaml'
@@ -42,9 +43,20 @@ require 'parsers/raw_post_parser/urlencoded_parser/urlencoded_parser_class'
 #content Parsers
 require 'content_parsers/spinner/spinner_class'
 
-#our connections
+
+#Our Connections and Wrappers
+require 'connection/elements/element_wrapper'
 require 'connection/connection_wrapper'
 require 'connection/connection'
+
+#our utilities
+require 'util/utility'
+require 'util/file_utilities'
+
+#our Connection Elements
+require 'connection/elements/default_element'
+require 'connection/elements/default_form'
+
 
 require 'connection/conn_mediator/connection_error_handler'
 require 'connection/conn_mediator/execute_fetch_call_module'
@@ -53,10 +65,15 @@ require 'connection/conn_mediator/connection_mediator'
 
 #mech connections
 require 'connection/connection_types/mechanize_connection/mechanize_connection_class'
+#mech Elements
+require 'connection/connection_types/mechanize_connection/elements/mechanize_form'
 
-#our utilities
-require 'util/utility'
-require 'util/file_utilities'
+#easy Rider Connection
+require 'connection/connection_types/easyrider_connection/easyrider_connection_class'
+#easy rider elements
+require 'connection/connection_types/easyrider_connection/elements/easyrider_input'
+
+
 
 #exceptions
 require 'exceptions/exceptions_custom'

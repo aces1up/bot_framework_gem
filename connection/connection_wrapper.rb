@@ -7,6 +7,7 @@
 module ConnectionWrapper
 
     include LogHandler
+    include ElementWrapper
 
     def cleanup_connection()
         return if @agent_var.nil?
@@ -53,6 +54,11 @@ module ConnectionWrapper
         Thread.current[:conns][@agent_var]
     end
 
+    def current_connection_type( ret_symbol=true )
+        klass = current_connector.class.to_s.gsub('Connection','').downcase
+        ret_symbol ? klass.to_sym : klass
+    end
+
     def request_count()
         init_connector
         #gets the current request count for the current connection
@@ -95,6 +101,10 @@ module ConnectionWrapper
 
        init_connector()
 
-       execute_connector_call( method, args )
+       #this executes the connector call and wraps the resulting
+       #element if needed
+       element = execute_connector_call( method, args )
+       wrap( element, method )
+
     end
 end

@@ -2,7 +2,7 @@
 #need to ensure we set our working directory before
 #requiring our botter framework.
 
-$working_directory = 'c:/pheed-bot/'
+$working_directory = 'c:/lwb-trainer/'
 $display_gui       = false
 
 
@@ -41,40 +41,44 @@ $display_gui       = false
 
 require 'botter'
 
+PhantomJSEXE = 'c:/temp/phantomjs.exe'
 
 
 class LoginTest
 
     include BotFrameWorkModules
 
-
+     def initialize()
+        @connection_class = EasyRiderConnection
+     end
 
      def test()
+
         init_vars
-        info("My Test Message")
-        set_clone_thread()
 
-        get('http://weebly.com')
+        get('http://www.weebly.com/')
+        #forms
+        #puts html
+        puts "current: #{current_connection_handle.obj_info}"
 
-        thr = Thread.new {
-          begin
-            init_vars
-            get('http://dude.com')
-          rescue => err
-              puts "thread error : #{err.message}"
-              puts err.backtrace
-          end
-        }
-        thr.join
+        element = current_connection_handle.conn.input(:id, 'weebly-name')
+        puts "exact = #{element.exists?.inspect}"
+        puts element.inspect
 
-        #get('http://linkwheelbandit.com')
-        puts "main thread html: #{html.inspect}"
-        
+        #element = current_connection_handle.conn.input(:id, /-name/)
+        #puts "broad = #{element.exists?.inspect}"
+        #puts element.html
+        #puts element.html
+        #puts element.length
+        found = find( nil, :xpath, '//div' )
+        puts found.obj_info
+        puts found.inspect
         
      end
 end
 
 LoginTest.new.test
+puts "done"
 
 
 

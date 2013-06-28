@@ -36,6 +36,12 @@ FetchMethods      = [ :get, :post, :put, :submit ]  #<--- these are the methods
                                                     #<--- proxy for ALL connection requests
                                                     #<--- number of connection retries
 
+#Elements Constants
+
+# lists of methods that we wrap the resulting objects in our
+# elements based on connection used.
+WrapElementMethods = [ :fetch_form, :forms, :find ]
+
 #Var Mediator Constants
 DefaultVarConatainers = [ :acct, :site, :temp ]
 

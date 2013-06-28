@@ -5,7 +5,6 @@ class Connection
     include Enviornment
     include ArgsHelper
 
-
     attr_accessor :use_local_proxy
 
     def initialize( args={} )
@@ -15,6 +14,16 @@ class Connection
         @proxy           = nil
 
         load_object_args(args)
+    end
+
+    def conn_method_implemented?( method )
+        @conn.respond_to?( method )
+    end
+
+    def report_warning( method )
+        #report a warning if we are running a method
+        #on a non implmented botter method directly on the connection
+        warn("Running Non Implmented Bot FrameWork Connection Method: #{method.inspect}")
     end
 
     def using_local_proxy?()
@@ -49,6 +58,8 @@ class Connection
         proxy = get_proxy()
   
         #set a shared var so our gui can access it
+        #proxy here would be a symbol if we are using :local
+        #for proxy
         self[:proxy] = proxy.is_a?(Symbol) ? proxy : "#{proxy[:ip]}:#{proxy[:port]}"
 
         set_proxy( proxy )
@@ -136,7 +147,7 @@ class Connection
         write_data_to_file( filename, html )
     end
 
-    def get(url)
+    def get( url, headers={} )
         raise NotImplementedError
     end
 
@@ -150,6 +161,10 @@ class Connection
 
     def submit( form )
         raise NotImplementedError
+    end
+
+    def method_missing( method, *args)
+        @conn.respond_to?( method ) ? @conn.send( method, *args ) : super
     end
 
 end

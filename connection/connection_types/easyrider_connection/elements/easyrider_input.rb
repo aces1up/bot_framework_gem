@@ -1,0 +1,5 @@
+
+
+class EasyriderInput < DefaultForm
+
+end

@@ -4,7 +4,7 @@ class MechanizeConnection < Connection
 
     def initialize( args={} )
 
-        super(args)
+        super( args )
 
         @conn ||= Mechanize.new
 	      @conn.verify_mode  = OpenSSL::SSL::VERIFY_NONE

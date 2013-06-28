@@ -1,0 +1,5 @@
+
+
+class MechanizeForm < DefaultForm
+
+end

@@ -43,6 +43,12 @@ module Kernel
     end
 end
 
+def get_constant( const )
+    begin
+        Kernel.const_get( const )
+    rescue ; nil ; end
+end
+
 def convert_val(value)
     case value
         when  'true'   ; true

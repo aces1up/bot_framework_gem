@@ -44,6 +44,12 @@ module LogHandler
         do_log( :info, msg )
     end
 
+    def info( msg="" )
+        return if !log_level_met?( :warn )
+        msg = msg_str( :warn, msg )
+        do_log( :warn, msg )
+    end
+
     def debug( msg="" )
         return if !log_level_met?( :debug )
         msg = msg_str( :debug, msg )
