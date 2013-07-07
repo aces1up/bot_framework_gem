@@ -7,6 +7,25 @@ module Enviornment
         Thread.current[:vars] = VariableMediator.new( init_data )
         Thread.current.init_uuid
     end
+
+    def get_clone_vars( thread=nil )
+        #retrieves a hash of our :conns and :vars
+        #thread vars for easy cloning later
+        thread ||= Thread.current
+
+        vars = {}
+        [ :vars, :conns, :uuid ].each do |clone_var|
+            next if !thread[clone_var]
+            vars[clone_var] = thread[clone_var]
+        end
+        
+        vars
+    end
+
+    def clone_vars( clone_with={} )
+        #adds the clone_with hash vars to the current Thread local vars.
+        clone_with.each do |clone_var, value| Thread.current[clone_var] = value end
+    end
     
     def clear_temp_vars()
         clear_container( :temp )
@@ -67,7 +86,7 @@ module Enviornment
     end
     
     def add(var_hash, var_container=:temp, overwrite=true, reset_container=false)
-        validate(var_hash)
+        validate( var_hash )
 
         Thread.current[:vars].add( var_hash, var_container, overwrite, reset_container )
     end

@@ -1,6 +1,9 @@
 
 
 module BioTags
+
+    public
+
     def day_index()    ;   (1..30).to_a.sample end
     def month_index()  ;   (1..12).to_a.sample end
 
@@ -16,6 +19,11 @@ module BioTags
 
         text = file_contents( filename )
         Spinner.new.spin( text )
+    end
+
+    def fullname()
+        #"#{self[:first_name]} #{self[:last_name]}"
+        solve_multiple_tags( [:first_name, :last_name] )
     end
 
 end

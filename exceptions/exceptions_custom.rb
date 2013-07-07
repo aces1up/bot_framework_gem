@@ -37,7 +37,7 @@ class FatalAppError < StandardError
     def report( thread=nil )
 
         thread ||= Thread.current
-        return if !thread.uuid
+        return if !has_var_mediator?
 
         #set the function status via the thread set functions here
         thread.set_var( { :status => status_msg }, :site )
@@ -68,11 +68,16 @@ class BotThreadTimeout  < GeneralAppException
 end
 
 
-class ConnectionError          < GeneralAppException    ; end
+class ConnectionError          < GeneralAppException    
+    def status_msg() ; :connection_error end
+end
+
 class FatalConnectionError     < FatalAppError          ; end
 
 class TagSolverError    < GeneralAppException    ; end
-class CaptchaError      < GeneralAppException    ; end
+class CaptchaError      < GeneralAppException    
+    def status_msg() ; :captcha_error end
+end
 class CacheError        < FatalAppError          ; end
 class EnviornmentError  < FatalAppError          ; end
 class StartupError      < FatalAppError          ; end

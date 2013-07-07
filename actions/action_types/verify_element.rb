@@ -2,26 +2,22 @@
 
 class VerifyElement < Action
 
-    attr_accessor :method, :how, :what, :match_type
-
     def init()
-        @method     = nil
-        @how        = nil
-        @what       = nil
-        @match_type = :broad
-    end
-
-    def dump_element()
-        "[Method: #{@method}] -- [#{@how.inspect}] -- [What: #{@what}] -- [Match: #{@match_type}]"
+        init_element_vars()
     end
 
     def run()
 
+        @what = solve_tag( @what )
         found = find( @method, @how, @what, @match_type )
 
-        if !found
+        if found
+            info("Found Element Using: #{dump_element}")
+        else
             raise ActionError, "Cannot verify Element: #{dump_element} on Page!"
         end
+        
+        found
 
     end
 

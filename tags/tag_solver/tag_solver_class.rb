@@ -12,7 +12,7 @@ class TagSolver
         @tag_args = tag_args
 
         #puts "created tag object: #{self.obj_info} -- #{@tag} -- #{@tag_args.inspect}"
-        init_tag_args       #<--- need to fixup tag if this tag solver was not created via the hint solver
+        init_tag_args     #<--- need to fixup tag if this tag solver was not created via the hint solver
 
     end
 
@@ -42,6 +42,14 @@ class TagSolver
         self[tag.to_sym] 
     end
 
+    def get_bio_var(var)
+        #goes out to our bio files and gets a random
+        #element from the file that our var corresponds to
+        #ex.  var == :first_name  --  Filename : bio/first_name.data
+        bio_file = "#{BioDirectory}#{var.to_s}.data"
+        rand_file_line( bio_file )
+    end
+
     def is_bio_var?(tag)
         BioVars.include?( tag.to_sym )
     end
@@ -65,9 +73,9 @@ class TagSolver
                 tag_solved = case
 
                     #get bio var here if we have one for tag_match
-                    when is_bio_var?( tag_match ) ;  get_bio_var( tag_match )
+                    when is_bio_var?( tag_match )   ;  get_bio_var( tag_match )
                     #if this class responds to tag via our TAGS module get it here.
-                    when respond_to?(tag_match)   ;  send( tag_match )
+                    when respond_to?( tag_match )   ;  send( tag_match )
 
                 else
                     tag_match
@@ -84,9 +92,7 @@ class TagSolver
                             self.add( { tag_match.to_sym => tag_solved }, :acct )
                     end
                 end
-
                  
-
                 tag_solved
 
             end

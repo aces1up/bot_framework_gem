@@ -14,7 +14,8 @@ class Connection
         @use_local_proxy = false
         @proxy           = nil
 
-        load_object_args(args)
+        load_object_args( args )
+
     end
 
     def conn_method_implemented?( method )
@@ -40,6 +41,21 @@ class Connection
         raise NotImplementedError
     end
 
+    def convert_proxy( proxy )
+        # converts our proxy, if its a hash, or a string or is local
+        # we fix it up and return it as either :local or a hash
+        case
+            when  @use_local_proxy                            ;  :local
+            when  ( proxy.is_a?(Symbol) and proxy == :local ) ;  :local
+
+            when  proxy.is_a?(String)
+                  #convert the proxy string to hash here
+                  proxy.split(':').to_h( [:ip, :port, :user, :pass] )
+        else
+            proxy #<---- this should be hash so just return it
+        end
+    end
+
     def get_proxy()
         #helper for getting proxy from cache
         ProxyCache.instance.get_proxy
@@ -61,7 +77,8 @@ class Connection
         #set a shared var so our gui can access it
         #proxy here would be a symbol if we are using :local
         #for proxy
-        self[:proxy] = proxy.is_a?(Symbol) ? proxy : "#{proxy[:ip]}:#{proxy[:port]}"
+        proxy_str = proxy.is_a?(Symbol) ? proxy : "#{proxy[:ip]}:#{proxy[:port]}"
+        add( { :proxy => proxy_str }, :site, true )
 
         set_proxy( proxy )
     end
@@ -167,6 +184,18 @@ class Connection
     def current_connection_type()
         #return current connection type as string
         self.class.to_s.gsub('Connection','')
+    end
+
+    def all_connection_info()
+        #calls all our connection info and builds a hash
+
+        info = ConnectionInfoHashMethods.map{ |conn_method|
+            val = nil            
+            val = send( conn_method ) if respond_to?( conn_method )
+            { conn_method => val }
+        }
+
+        info.reduce Hash.new, :merge
     end
 
     def method_missing( method, *args)

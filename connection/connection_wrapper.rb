@@ -9,12 +9,14 @@ module ConnectionWrapper
     include LogHandler
     include ElementWrapper
 
+    attr_accessor :connection_class, :agent_var, :connection_options
+
     def cleanup_connection()
         return if @agent_var.nil?
         conn_mediator.cleanup( @agent_var )
     end
 
-    def current_connection_handle(conn_name=nil)
+    def current_connection_handle( conn_name=nil )
         #returns the current connection handle for
         #the @agent_var specified
         init_connector()
@@ -43,10 +45,14 @@ module ConnectionWrapper
         @connection_class ||= MechanizeConnection
         @connection_class = get_connection_class_from_string() if @connection_class.is_a?(String)
 
-        debug("Initializing connection Class: #{@connection_class.inspect} -- #{@agent_var.inspect}")
+        #set up our connection options.
+        @connection_options ||= {}
+        @connection_options.merge!( { :use_local_proxy => true } ) if @use_local_proxy
 
-        args = @use_local_proxy ? {:use_local_proxy => true} : {}
-        Thread.current[:conns][@agent_var] = @connection_class.new( args )
+        Thread.current[:conns][@agent_var] = @connection_class.new( @connection_options )
+
+        debug("Initialized Connection Class: #{@connection_class.inspect} -- #{@agent_var.inspect} -- Conn Args: #{@connection_options.inspect}")
+
     end
 
     def current_connector()

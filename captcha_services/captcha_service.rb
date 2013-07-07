@@ -9,7 +9,7 @@ class CaptchaService
         @creds = creds
         @image_data = image_data
 
-        #@connection_class = FullThrottleConnection
+        @connection_class = MechanizeConnection
 
         @retry = 0
         @result = {}                #<--- our result hash containing our result variables

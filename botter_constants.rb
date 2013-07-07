@@ -36,6 +36,9 @@ FetchMethods      = [ :get, :post, :put, :submit ]  #<--- these are the methods
                                                     #<--- proxy for ALL connection requests
                                                     #<--- number of connection retries
 
+ConnectionInfoHashMethods = [ :cur_url, :cur_uri, :cookies]       #<--- the methods we try and call to
+                                                          #<--- get all the current connection info
+
 #Elements Constants
 
 # lists of methods that we wrap the resulting objects in our

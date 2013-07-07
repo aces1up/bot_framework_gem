@@ -5,24 +5,20 @@ module LogHandler
     def msg_str( log_level, msg )
         "#{time} -- #{log_level.to_s.upcase}: #{msg}"
     end
-
+    
     def do_log( log_level, msg, thread=nil )
 
-        thread ||= Thread.current
+        #check if we have a log handler for this thread.
+        if ( log_handler = get_log_handler( thread ) )
 
-        if Display_GUI
+            thread ||= Thread.current
+            return if !log_handler.respond_to?( :update_msg )
 
-            table_obj = get_gui_table_obj( thread )
-            if table_obj
-                #add a :site container shared var for the log level
-                #we are processing
-                thread.set_var( { log_level => msg }, :site)
-                table_obj.update( thread )
-            end
+            log_handler.update_msg( msg, log_level, thread )
 
-            #puts( msg_str( log_level, msg ) )
         else
-            puts( msg_str( log_level, msg ) )
+            msg_output = msg_str( log_level, msg )
+            puts( msg_output )
         end
         
     end
@@ -44,7 +40,7 @@ module LogHandler
         do_log( :info, msg )
     end
 
-    def info( msg="" )
+    def warn( msg="" )
         return if !log_level_met?( :warn )
         msg = msg_str( :warn, msg )
         do_log( :warn, msg )
@@ -58,6 +54,9 @@ module LogHandler
 
     def error( msg="", thread=nil )
         return if !log_level_met?( :error )
+        #we call do_log with the thread that has our
+        #thread vars IF we are getting called by
+        #an exception that was tirggered outside of our normal thread.
         do_log( :error, msg, thread )
     end
 

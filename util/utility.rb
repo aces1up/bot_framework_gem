@@ -7,6 +7,14 @@ module BotFrameWorkModules
     include LogHandler
 end
 
+class Class
+  def subclasses
+    result = []
+    ObjectSpace.each_object(Class) { |klass| result << klass if klass < self }
+    result
+  end
+end
+
 class Fixnum
   def negative?()
       self < 0
@@ -21,7 +29,7 @@ end
 
 
 class Array
-   def to_h(keys)
+   def to_h( keys )
        Hash[*keys.zip(self).flatten]
    end
 end
@@ -58,6 +66,9 @@ def convert_val(value)
     end
 end
 
+def deep_copy(o)   Marshal.load(Marshal.dump(o)) end
+
+
 def param_to_arr(param)
     #converts something like captchaimage1|captchaimage2 to array
     #or just returns param if there is no | seperator
@@ -83,6 +94,6 @@ def alert_pop( message, title=nil )
 end
 
 def alert_pop_err( err, msg=nil )
-    msg_str ||= "Error: "
-    alert_pop("#{msg_str} #{err.message}\n#{err.backtrace.join("\n")}")
+    msg ||= "Error: "
+    alert_pop("#{msg} -- #{err.class.to_s} -- #{err.message}\n#{err.backtrace.join("\n")}")
 end

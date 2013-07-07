@@ -34,27 +34,17 @@ class MechanizeConnection < Connection
 
     def set_proxy( proxy )
 
-        return if @use_local_proxy
-
-        #if proxy is == :local, don't use proxy
-        if proxy.is_a?(Symbol) and proxy == :local
-            info("Using LOCAL IP..")
-            return
-        end
-
-        case
-            when proxy.is_a?(String) ;
-              ip, port, user, pass = proxy.split( ':' )
-              @proxy = :local  #<--- set local here just so we don't try to increment
-                               #<--- the success and fail counters
+        @proxy = convert_proxy( proxy )
+              
+        case 
+            # check if we are using local ip message
+            when using_local_proxy? ; info( "Using LOCAL IP.." )
         else
-              ip, port, user, pass = proxy[:ip], proxy[:port], proxy[:user], proxy[:pass]
-              @proxy = proxy
+            info("Setting Mechanize Proxy to : [ #{@proxy[:ip]}:#{@proxy[:port]} ]")
+            @conn.set_proxy( @proxy[:ip], @proxy[:port], @proxy[:user], @proxy[:pass] )
         end
-
-        info("Setting Proxy to : [ #{ip}:#{port} ]")
-        @conn.set_proxy( ip, port, user, pass )
-
+      
+        @proxy   #<---- return it here just so other function might use the return.
     end
 
     def set_user_agent()
@@ -63,7 +53,8 @@ class MechanizeConnection < Connection
     end
 
     def cookies()
-        cookie_vars = [:name, :value, :version, :domain, :path, :secure, :comment, :max_age,
+        cookie_vars = [
+         :name, :value, :version, :domain, :path, :secure, :comment, :max_age,
          :session, :created_at, :accessed_at
         ]
         @conn.cookies.map{ |cookie_obj| Hash[ *cookie_vars.map{|cookie_var| [ cookie_var, cookie_obj.send(cookie_var) ] }.flatten ] }
@@ -86,10 +77,12 @@ class MechanizeConnection < Connection
     end
 
     def cur_url()
+        return nil if @conn.page.nil?
         @conn.page.uri.to_s
     end
 
     def cur_uri()
+        return nil if @conn.page.nil?
         @conn.page.uri
     end
 

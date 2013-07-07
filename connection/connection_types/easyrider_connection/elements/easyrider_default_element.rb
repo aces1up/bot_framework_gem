@@ -16,7 +16,7 @@ class EasyriderDefault < Element
        @attribs
     end
 
-    def children_for_element( show_invisible )
+    def children_for_element( show_invisible=false )
         elements = @element.children_for_element( show_invisible )
         wrap( elements, :children_for_element, 'Easyrider' )
     end

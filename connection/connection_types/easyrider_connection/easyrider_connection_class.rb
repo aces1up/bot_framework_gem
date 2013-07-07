@@ -6,21 +6,41 @@ class EasyriderConnection < Connection
 
         super( args )
 
-        @conn ||= EasyRider.new()
+        switch_proxy()      #<--- this will set @proxy
+        # Merge in our proxy for initialization if we are not using local proxy
+        args.merge!( { :proxy => @proxy } ) if !using_local_proxy?
+
+        @conn ||= EasyRider.new( args )
 
     end
+
+    def set_proxy( proxy )
+        @proxy = convert_proxy( proxy )
+        if using_local_proxy?
+            info( "Using LOCAL IP.." )
+        else
+            info("Setting EasyRider Proxy to : [ #{@proxy[:ip]}:#{@proxy[:port]} ]")
+        end
+    end
+
 
     #our info methods
     def html()
         @conn.html
     end
 
-    def url()
-        @conn.url
+    def cur_url()
+        @conn.cur_url
     end
 
-    def uri()
-        @conn.uri
+    def cur_uri()
+        @conn.cur_uri
+    end
+
+    def cookies()
+        [1,2,3,4,
+         { :dude => { :four => [5,6,7] } },
+        5]
     end
 
     #our FetchMethods

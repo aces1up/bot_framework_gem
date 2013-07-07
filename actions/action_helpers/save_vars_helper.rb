@@ -1,6 +1,8 @@
 
 
-module SaverHelperModule
+module SaveVarsHelper
+
+    attr_accessor :save_to_temp, :save_var, :overwrite
 
     def do_save()
 
@@ -11,4 +13,9 @@ module SaverHelperModule
 
     end
 
+    def init_save_vars()
+        @save_to_temp  = true
+        @overwrite     = true
+        @save_var      = nil
+    end
 end

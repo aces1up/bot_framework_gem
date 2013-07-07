@@ -2,13 +2,11 @@
 
 class SaveRegex < Action
 
-    attr_accessor :search_string, :save_to_temp, :save_var, :overwrite
+    attr_accessor :search_string
 
     def init()
         @search_string = nil
-        @save_to_temp  = true
-        @overwrite     = true
-        @save_var      = nil
+        init_save_vars()
     end
 
     def run()

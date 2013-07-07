@@ -2,17 +2,6 @@
 
 module EnviornmentHelper
 
-    def clear_gui_error()
-        return if !Display_GUI
-        error("")
-    end
-
-    def update_gui()
-        return if !Display_GUI
-        table_model = get_gui_table_obj
-        table_model.update() if table_model
-    end
-
     def set_env_var(var, val, container=:temp)
         add( {var => val}, container )
     end
@@ -26,19 +15,22 @@ module EnviornmentHelper
         update_gui()
     end
     
-    def set_gui_table_location(location)
-        set_env_var( :gui_loc, location, :site ) 
+    def set_log_handler( obj )
+        set_env_var( :log_handler, obj, :site )
+    end
+
+    def clear_log_handler()
+        set_env_var( :log_handler, nil, :site )
     end
     
-    def get_gui_table_obj( thread=nil )
+    def get_log_handler( thread=nil )
         #attempts to get gui_table obj via the :site container
         #var --> :gui_loc
         return nil if !has_var_mediator? and !thread
 
-        location = thread ? thread.get_var(:gui_loc) : self[:gui_loc]
-        return nil if !location
-        
-        DashboardGuiController.instance.send( location )
+        handler = thread ? thread.get_var( :log_handler ) : self[:log_handler]
+
+        handler ? handler : nil
     end
 
 end

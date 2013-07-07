@@ -116,9 +116,12 @@ require 'variable_mediator/default_variable_container'
 require 'variable_mediator/var_mediator_class'
 
 #our Actions
-require 'actions/action_types/saver_helper'
+require 'actions/action_helpers/save_vars_helper'
+require 'actions/action_helpers/element_vars_helper'
 require 'actions/default_action'
 require 'actions/action_types/goto_page'
+require 'actions/action_types/click_action'
+require 'actions/action_types/set_element'
 require 'actions/action_types/verify_string'
 require 'actions/action_types/save_regex'
 require 'actions/action_types/verify_element'
