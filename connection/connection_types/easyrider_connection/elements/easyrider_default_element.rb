@@ -27,7 +27,11 @@ class EasyriderDefault < Element
     end
 
     def tag_name()
-        @element.tag_name
+        begin
+            @element.tag_name
+        rescue => err
+            "STALE or Unknown Error!"
+        end
     end
 
     def attribute_value( attr )

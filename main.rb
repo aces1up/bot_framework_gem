@@ -70,10 +70,27 @@ class LoginTest
 
 
         init_vars
-        get('http://weebly.com')
+        get('http://linkwheelbandit.com/files/iframe.htm')
         #puts image_urls.inspect
         #puts "#{image_exists?( 'down-artgrtrrow.png' ).inspect}"
-        puts cookies.inspect
+        #puts cookies.inspect
+        #frames = current_connection_handle.elements_for_tag_name( :frame )
+        #sub_elements = frames.first.children_for_element
+        #puts sub_elements.length
+        #second = sub_elements.first.children_for_element
+        #puts second.length
+        #puts second.inspect
+
+        sym = :frame
+        method = "#{sym.to_s}s".to_sym
+        frames = current_connection_handle.conn.send( method )
+
+        input_no_frame = current_connection_handle.conn.input(:id => 'weebly-name')
+        puts "no frame: #{input_no_frame.inspect} -- #{input_no_frame.exists?.inspect}"
+        #' id weebly-name'
+        frame = frames.to_a.first
+        input = frame.input(:id => 'weebly-name')
+        puts "with frame: #{input.inspect} -- #{input.exists?.inspect}"
 
      end
 end
