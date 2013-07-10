@@ -20,6 +20,9 @@ require 'thread/thread_extensions'
 #our logger
 require 'logger/log_handler'
 
+#our hardware helper
+require 'hardware/process/process_helper'
+
 #args helper
 require 'args/args_helper'
 
@@ -73,6 +76,7 @@ require 'connection/connection_types/mechanize_connection/elements/mechanize_for
 require 'connection/connection_types/easyrider_connection/easyrider_connection_class'
 #easy rider elements
 require 'connection/connection_types/easyrider_connection/elements/easyrider_default_element'
+require 'connection/connection_types/easyrider_connection/elements/easyrider_form'
 require 'connection/connection_types/easyrider_connection/elements/easyrider_input'
 
 

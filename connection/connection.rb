@@ -38,7 +38,7 @@ class Connection
         # has a 404 / 500 error or other type of error that says the site is unavailable.
         # if we return true on this, the underlying code will attempt to do a proxy
         # switch
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def convert_proxy( proxy )
@@ -63,7 +63,7 @@ class Connection
 
     def set_proxy( proxy )
         #actually sets the proxy on the connection
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def switch_proxy()
@@ -90,12 +90,12 @@ class Connection
         #  :min_fields
         #  :with_action
         #  :with_index
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def forms()
         #returns all forms on the page
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
 
@@ -109,51 +109,51 @@ class Connection
     def cookies()
         #returns an array of hash of cookies so we can easily load it
         #into whatever connection that might need to transfer cookies
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def load_cookies(for_uri, cookies)
         #loads cookies into connection with the cookie array hash cookies
         #and using the for_uri
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
 
     #image handling
     def image_urls()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def image_exists?( url )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def find_image_url( url, match_type=:broad )
         #searches through all image_urls and returns the
         #url that matches the one we sent. Other wise returns false
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     #find / search elements
     def find( method, how=nil, what=nil, match_type=:broad )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     #Navigation and Info
 
     def cur_url()
         #returns the current url
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def cur_uri()
         #returns the current uri of loaded page
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def html()
         #returns current html of page
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def save_html(filename)
@@ -166,19 +166,19 @@ class Connection
     end
 
     def get( url, headers={} )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def post( url, body, headers )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def put( url, body, headers )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def submit( form )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def current_connection_type()

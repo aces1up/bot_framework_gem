@@ -56,7 +56,7 @@ class TagSolver
     
     def parse_tag()
 
-        @tag.gsub!(/~~(.+?)~~/) { |tag|
+        @tag.gsub!( /~~(.+?)~~/ ) { |tag|
 
             tag_match = $1
             found = tag_in_vars?( tag_match )
@@ -81,8 +81,7 @@ class TagSolver
                     tag_match
                 end
 
-
-
+=begin
                 if tag_solved != tag_match
                     #if tag_solved != tag_match then we retreived a NEW fresh solved variables
                     #so set an enviornment variable here so we can retrieve them later
@@ -92,7 +91,7 @@ class TagSolver
                             self.add( { tag_match.to_sym => tag_solved }, :acct )
                     end
                 end
-                 
+=end
                 tag_solved
 
             end

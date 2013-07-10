@@ -2,6 +2,8 @@
 
 class CaptchaMediator
 
+    include BotFrameWorkModules
+
     def initialize( image_data )
 
         @image_data = image_data
@@ -28,7 +30,7 @@ class CaptchaMediator
            login_creds.merge!( :service => Kernel.const_get( "#{service_name.to_s.capitalize}Solver" ) )
            login_creds
         else
-           false
+           nil
         end
 
     end
@@ -44,11 +46,9 @@ class CaptchaMediator
         services_run_order += services
 
         @services = []
+        @services = services_run_order.map{ |service| get_service_creds( service ) }.compact
 
-        @services = services_run_order.map{ |service| get_service_creds(service) }
-        @services.delete(false)
-
-        puts "using Captcha mediator services: #{@services.inspect}"
+        debug "Loaded Captcha Mediator Services: #{@services.inspect}"
     end
 
     def load_image_data()
@@ -78,6 +78,11 @@ class CaptchaMediator
 
         #load our services here
         load_services()
+
+        #raise error here if we were unable to load any services
+        if @services.empty?
+            raise CaptchaError, "Cannot Solve Captcha, Unable to find Login Credentials for any Captcha Service!"
+        end
 
         #figure out what we do here when no more services are available
         while (cap_solver = @services.shift) and @captcha.nil? do

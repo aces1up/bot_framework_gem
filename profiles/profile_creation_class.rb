@@ -28,16 +28,20 @@ class ProfileData
         password
     end
 
+    def get_profile_var( var )
+        solve_tag( var, nil, true )
+    end
+
     def generate
 
-        username = "#{get_bio_var( :username )}#{rand(999)}"
-        domain   = get_bio_var( :domain )
+        username = "#{get_profile_var( :username )}#{rand(999)}"
+        domain   = get_profile_var( :domain )
         email    = "#{username}@#{domain}"
 
         @profile = {
             :username       =>    username,
-            :first_name     =>    get_bio_var( :first_name ),
-            :last_name      =>    get_bio_var( :last_name ),
+            :first_name     =>    get_profile_var( :first_name ),
+            :last_name      =>    get_profile_var( :last_name ),
             :domain         =>    domain,
             :email          =>    email,
             :password       =>    random_password

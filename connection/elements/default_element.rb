@@ -14,41 +14,47 @@ class Element
     #info Methods
 
     def attributes()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def tag_name()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def attribute_value( attr )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def children_for_element()
-        raise NotImplementedError
+        #gets just the immediate children for this element, ex.. 1 Level deep.
+        raise FunctionNotImplemented
+    end
+
+    def elements_for_tag_name( tag, show_invisible=false )
+        #gets all subelements for this element that match dom tag
+        raise FunctionNotImplemented
     end
 
     #Manipulation Methods
 
     def set( val )
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def click()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def hover()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def hover_js()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def flash()
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 
     def method_missing( method, *args)

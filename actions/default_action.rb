@@ -25,6 +25,6 @@ class Action
 
     def run()
         #this function should be implemented on sub ACtions.
-        raise NotImplementedError
+        raise FunctionNotImplemented
     end
 end

@@ -61,6 +61,12 @@ module Enviornment
         raise EnviornmentError, "Cannot Retrieve Enviornment Variable : #{attr.inspect} -- No Var Mediator Set for Thread!" if !has_var_mediator?
     end
 
+    def container_data( container )
+        #retrieves the data hash held in container Specified
+        validate('Container Data')
+        Thread.current[:vars].container_data( container )
+    end
+
     def save_container(container, *args)
         validate('Save Container')
         Thread.current[:vars].save_container( container, *args )

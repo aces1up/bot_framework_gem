@@ -14,7 +14,7 @@ module RecaptchaImageFetcher
 
         RecaptchaPublicKeySearchers.each do |regex|
             result = html.scan(regex)
-            puts "captcha image public key search: result: #{result.inspect}"
+            info "captcha image public key search: result: #{result.inspect}"
             next if !result or result.empty?
             return result[0][0]
         end

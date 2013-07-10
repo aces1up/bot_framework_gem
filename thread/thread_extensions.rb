@@ -14,6 +14,16 @@ class Thread
           key?(:vars)
       end
 
+      def container_data( container )
+          raise EnviornmentError, "Cannot Get Container Data for: #{container.inspect} -- No Var Mediator Set for Thread!" if !has_var_mediator?
+          self[:vars].container_data( container )
+      end
+
+      def container_empty?(container)
+          raise EnviornmentError, "Cannot Check if Container Empty for: #{container.inspect} -- No Var Mediator Set for Thread!" if !has_var_mediator?
+          self[:vars].container_empty?( container )
+      end
+
       def get_var( attr )
           raise EnviornmentError, "Cannot Retrieve Enviornment Variable Via Thread : #{attr.inspect} -- No Var Mediator Set for Thread!" if !has_var_mediator?
           self[:vars][attr]

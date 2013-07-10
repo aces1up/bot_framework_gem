@@ -97,3 +97,13 @@ def alert_pop_err( err, msg=nil )
     msg ||= "Error: "
     alert_pop("#{msg} -- #{err.class.to_s} -- #{err.message}\n#{err.backtrace.join("\n")}")
 end
+
+def get_yes_no(title, dialog_text)
+      result = JOptionPane.showConfirmDialog(
+               nil,
+               dialog_text,
+               title,
+               JOptionPane::YES_NO_OPTION)
+
+      result == 0 ? true : false
+end

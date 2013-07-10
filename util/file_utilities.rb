@@ -41,10 +41,10 @@ def dir_files_to_sym(directory)
     Dir.glob( "#{directory}*" ).map{ |filename| File.basename( filename, ".data" ).to_sym }
 end
 
-def dir_files( dir, recursive=false )
+def dir_files( dir, recursive=false, include_directories=false )
     dir = dir[-1,1] == '/' ? dir : "#{dir}/"
     search_pattern = recursive ? "#{dir}**/*" : "#{dir}*"
-    Dir[search_pattern]
+    Dir[search_pattern].delete_if{ |file| !include_directories and File.directory?( file ) }
 end
 
 def random_dir( dir )

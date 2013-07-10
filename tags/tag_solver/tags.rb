@@ -16,7 +16,7 @@ module Tags
             cap_med.solve
 
         rescue => err
-            raise CaptchaError, "[Captcha Solver Fatal Error] -- Fatal Error Encountered -- #{err.message}\n#{err.backtrace.join("\n")}"
+            raise CaptchaError, "[Captcha Solver Fatal Error] -- #{err.message}\n#{err.backtrace.join("\n")}"
         end
 
 

@@ -21,6 +21,11 @@ class EasyriderDefault < Element
         wrap( elements, :children_for_element, 'Easyrider' )
     end
 
+    def elements_for_tag_name( tag, show_invisible=false )
+        elements = @element.elements_for_tag_name( tag, show_invisible )
+        wrap( elements, :elements_for_tag_name, 'Easyrider' )
+    end
+
     def tag_name()
         @element.tag_name
     end

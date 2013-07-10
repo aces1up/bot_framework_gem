@@ -136,6 +136,7 @@ class MechanizeConnection < Connection
     end
 
     def find_image_url( url, match_type=:broad )
+
         #searches through all image_urls and returns the
         #url that matches the one we sent. Other wise returns false
         case match_type

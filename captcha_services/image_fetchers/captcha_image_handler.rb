@@ -31,11 +31,11 @@ class CaptchaImageFetcher
 
     def save_captcha_to_disk()
         save_as( captcha_filename, html )
-        puts("[Captcha Solver] -- Saved Captcha Image to Disk. -- Filename: #{filename}")
+        info("[Captcha Solver] -- Saved Captcha Image to Disk. -- Filename: #{filename}")
     end
 
     def save_image()
-        puts("[Captcha Solver] -- Saving Captcha Image to Memory -- [ #{html.length} ] Bytes") if !SaveCaptchaImagestoDisk
+        info("[Captcha Solver] -- Saving Captcha Image to Memory -- [ #{html.length} ] Bytes") if !SaveCaptchaImagestoDisk
         SaveCaptchaImagestoDisk ? save_captcha_to_disk : @image_data = html
     end
 
@@ -51,6 +51,7 @@ class CaptchaImageFetcher
 
 
         rescue => err
+            alert_pop_err(err, "Captcha Fetch Error:")
             raise CaptchaError, ("[Solve Captcha] -- Unable to Retrieve Image: #{@image_url} -- Error: #{err.message}")
         end
 
@@ -92,7 +93,7 @@ class CaptchaImageFetcher
 
            when :image_search
 
-                puts("[Captcha Solver] -- Determined Captcha Type -- [ Force Normal Image ]")
+                info("[Captcha Solver] -- Determined Captcha Type -- [ Force Normal Image ]")
                 store_normal_image()
 
            when :recaptcha

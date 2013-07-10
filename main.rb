@@ -39,17 +39,23 @@ $display_gui       = false
   $LOAD_PATH << 'C:\jruby-gem-repository\gems\botter-0.0.1\lib'
 
 
+  #PROLLY SHOULDN'T HAVE THIS IN THIS GEM AFTER DONE TESTING
+  $LOAD_PATH << 'C:\Ruby Code\easy_rider\lib'
+
 require 'botter'
 
 PhantomJSEXE = 'c:/temp/phantomjs.exe'
 
 
+
+
 class LoginTest
 
     include BotFrameWorkModules
+    include ProcessHelper
 
      def initialize()
-        #@connection_class = EasyriderConnection
+        @connection_class = EasyriderConnection
         #@connection_options = {
         #      :browser_type => :firefox
         #}
@@ -57,26 +63,18 @@ class LoginTest
 
      def test()
 
+        task_kill_process_now( 'phantomjs.exe' )
+        
+        #result = `ping www.google.com`
+        #puts result.inspect
+
+
         init_vars
+        get('http://weebly.com')
+        #puts image_urls.inspect
+        #puts "#{image_exists?( 'down-artgrtrrow.png' ).inspect}"
+        puts cookies.inspect
 
-        get('http://www.weebly.com/')
-        #forms
-        #puts html
-        #element = current_connection_handle.conn.input(:id, /-name/)
-        #puts "broad = #{element.exists?.inspect}"
-        #puts element.html
-        #puts element.html
-        #puts element.length
-=begin
-        found = find( :div, :id, 'signup-inputs' )
-        puts found.obj_info
-        puts found.inspect
-
-        eles = found.children_for_element
-        eles.each do |ele|
-            puts ele.tag_name
-        end
-=end
      end
 end
 

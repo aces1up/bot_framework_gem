@@ -78,7 +78,9 @@ class TagSolverError    < GeneralAppException    ; end
 class CaptchaError      < GeneralAppException    
     def status_msg() ; :captcha_error end
 end
-class CacheError        < FatalAppError          ; end
+class CacheError                 < FatalAppError          ; end
+class FunctionNotImplemented     < FatalAppError          ; end
+
 class EnviornmentError  < FatalAppError          ; end
 class StartupError      < FatalAppError          ; end
 class DeadSite          < GeneralAppException    ; end

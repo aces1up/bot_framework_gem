@@ -14,6 +14,10 @@ class EasyriderConnection < Connection
 
     end
 
+    def teardown()
+        @conn.quit
+    end
+
     def set_proxy( proxy )
         @proxy = convert_proxy( proxy )
         if using_local_proxy?
@@ -38,9 +42,20 @@ class EasyriderConnection < Connection
     end
 
     def cookies()
-        [1,2,3,4,
-         { :dude => { :four => [5,6,7] } },
-        5]
+        cookie_vars = [
+         :name, :value, :version, :domain, :path, :secure, :comment, :max_age,
+         :session, :created_at, :accessed_at
+        ]
+        
+        @conn.cookies.to_a.map{ |cookie_hash| Hash[ *cookie_vars.map{ | cookie_var |
+                if cookie_hash[cookie_var].nil?
+                    [ nil, nil ]
+                else
+                    [ cookie_var, cookie_hash[cookie_var] ]
+                end
+                }.flatten.compact ]
+        }
+
     end
 
     #our FetchMethods
@@ -48,16 +63,39 @@ class EasyriderConnection < Connection
         @conn.get( url )
     end
 
+    def image_urls()
+        images = @conn.elements_for_tag_name( :img, true )
+        images.map{ |image| image.src }
+    end
+
+    def find_image_url( url, match_type=:broad )
+
+        #searches through all image_urls and returns the
+        #url that matches the one we sent. Other wise returns false
+        case match_type
+            when :exact ; image_urls.find{ |image_url| image_url == url }
+        else
+            image_urls.find{ |image_url| image_url =~ Regexp.new( url ) }
+        end
+    end
+
+    def image_exists?( src, match_type=:broad )
+
+        found = find( :img, :src, src, match_type  )
+        found ? true : false
+
+    end
+
+    #our finder methods
     def search_string( how, what, match_type )
         case
             when ( match_type == :broad and how != :xpath )
-                Regexp.new( what )
+                Regexp.new( Regexp.quote( what ) )
         else
             what
         end
     end
 
-    #our finder methods
     def find( method=nil, how=nil, what=nil, match_type=:broad )
 
         method ||= :elements
@@ -79,6 +117,8 @@ class EasyriderConnection < Connection
 
         srch_string = search_string( how, what, match_type )
         result      = @conn.send( method, how, srch_string )
+
+        debug("Connector using find..  Search Query: #{srch_string}")
 
         result = result.respond_to?( :to_a ) ? result.to_a : [ result ]
         result.delete_if{ |ele| !ele.exists? }

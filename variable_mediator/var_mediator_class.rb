@@ -25,6 +25,14 @@ class VariableMediator
 
     end
 
+    def container_data( container )
+        if @var_objs[container]
+            @var_objs[container].data
+        else
+            raise EnviornmentError, "Cannot Retrieve Container Data! -- Var Container #{container.inspect} Does not Exist!"
+        end
+    end
+
     def clear_container( container )
         if @var_objs[container]
             @var_objs[container].clear()
