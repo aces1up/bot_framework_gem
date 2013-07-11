@@ -96,9 +96,11 @@ class EasyriderConnection < Connection
         end
     end
 
-    def find( method=nil, how=nil, what=nil, match_type=:broad )
+    def find( method=nil, how=nil, what=nil, match_type=:broad, start_element=nil )
 
-        method ||= :elements
+        start_element ||= @conn
+        method        ||= :elements
+
 
         #1.  method     -- should be div / span / input etc.. etc..
         #                  If no method specified we use elements
@@ -116,7 +118,7 @@ class EasyriderConnection < Connection
         #first setup our find string
 
         srch_string = search_string( how, what, match_type )
-        result      = @conn.send( method, how, srch_string )
+        result      = start_element.send( method, how, srch_string )
 
         debug("Connector using find..  Search Query: #{srch_string}")
 

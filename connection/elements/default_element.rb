@@ -57,10 +57,22 @@ class Element
         raise FunctionNotImplemented
     end
 
+    def focus()
+        raise FunctionNotImplemented
+    end
+
     def method_missing( method, *args)
-        warn("Running No Implmented Method on Element : #{self.obj_info} -- #{method.inspect}")
-        #@element.respond_to?( method ) ? @element.send( method, *args ) : super
-        super( method, args )
+
+        if @element.respond_to?( method )
+
+            warn("Running No Implmented Method on Element : #{self.obj_info} -- #{method.inspect}")
+            @element.send( method, *args )
+
+        else
+            super( method, args )
+        end
+
+        
     end
 
 end

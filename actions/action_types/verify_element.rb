@@ -9,7 +9,7 @@ class VerifyElement < Action
     def run()
 
         @what = solve_tag( @what )
-        found = find( @method, @how, @what, @match_type )
+        found = find( @method, @how, @what, @match_type, @start_element )
 
         if found
             info("Found Element Using: #{dump_element}")

@@ -57,6 +57,10 @@ class EasyriderDefault < Element
         @element.hover_js
     end
 
+    def focus()
+        @element.focus
+    end
+
     def flash( num_times, interval )
         @element.flash( num_times, interval )
     end
