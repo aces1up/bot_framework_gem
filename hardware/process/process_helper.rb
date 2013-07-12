@@ -13,11 +13,18 @@ module ProcessHelper
      createprocess.call( 0, execute_string, 0, 0, 0, 0, 0, 0, startinfo, procinfo )
    end
 
-   def task_kill_process_now( process_name)
-       `taskkill /im #{process_name} /f /t >nul 2>&1`
+   def kill_process_win( process_name, kill_all=false )
+       kill_all_str = kill_all ? '/t' : ''
+       `taskkill /im #{process_name} /f #{kill_all_str} >nul 2>&1`
    end
 
-   def kill_process_now(process_exe, process_multiple=false)
+   def kill_process( process_name, kill_all=false )
+       case os
+          when :win  ;   kill_process_win( process_name, kill_all )
+       end
+   end
+
+   def kill_process_now( process_exe, process_multiple=false )
         wmi = WIN32OLE.connect("winmgmts://")
         processes = wmi.ExecQuery("select * from win32_process")
         #puts("#{processes.inspect}")

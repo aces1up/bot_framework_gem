@@ -21,7 +21,11 @@ require 'thread/thread_extensions'
 require 'logger/log_handler'
 
 #our hardware helper
+require 'hardware/os/os_resolver'
+require 'hardware/enviornment/enviornment_variables'
+require 'hardware/browser/browser_helper'
 require 'hardware/process/process_helper'
+require 'hardware/hardware_module'
 
 #args helper
 require 'args/args_helper'

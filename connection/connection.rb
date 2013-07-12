@@ -5,6 +5,7 @@ class Connection
     include Enviornment
     include ArgsHelper
     include ElementWrapper
+    include HardwareHelper
 
     attr_accessor :use_local_proxy
 
@@ -103,6 +104,11 @@ class Connection
         #handles any tearing down of the connection here
         #this should be subclassed to unsure connection is closed
         #down gracefully.
+    end
+
+    def hard_kill()
+        #kills all .exe associated with connection in a non
+        #graceful way
     end
 
     #cookie Handling

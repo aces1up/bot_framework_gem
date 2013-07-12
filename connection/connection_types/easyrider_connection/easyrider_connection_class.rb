@@ -14,6 +14,19 @@ class EasyriderConnection < Connection
 
     end
 
+    def hard_kill()
+        begin
+           if defined?( PhantomJSEXE )
+              process_name = File.basename( PhantomJSEXE )              
+              kill_process( process_name, true )
+           else
+              raise ConnectionError, "Cannot Hard Kill EasyRider Connection!  No PhantomJSEXE const defined!"
+           end
+        rescue => err
+            alert_pop( err, 'EasyRider Hard Kill Error: ')
+        end
+    end
+
     def teardown()
         @conn.quit
     end
@@ -96,10 +109,41 @@ class EasyriderConnection < Connection
         end
     end
 
-    def find( method=nil, how=nil, what=nil, match_type=:broad, start_element=nil )
+    def wait_for_element( element, wait_method, wait_timeout )
+      begin
+        element.send( wait_method, wait_timeout )
+      rescue Watir::Wait::TimeoutError => err
+          #got wait timeout
+      end
+    end
+
+    def wait_for_elements( elements, wait_method, wait_timeout )
+        elements.each do |element| wait_for_element( element, wait_method, wait_timeout ) end
+    end
+
+    def remove_elements( elements, wait_method )
+        wait_method ||= :none
+
+        elements.delete_if{ |ele|
+
+             case wait_method
+                when :wait_while_present
+                  #if element still exists after waiting this actually failed
+                  #as if shouldn't exist after waiting.  So we Delete the element
+                  #which ultimately should return verify element error
+                  #further up the stack.
+                  ele.exists?
+             else
+                  !ele.exists?
+             end
+        }
+    end
+
+    def find( method=nil, how=nil, what=nil, match_type=:broad, start_element=nil, wait_method=:none, wait_timeout=1 )
 
         start_element ||= @conn
         method        ||= :elements
+        wait_method     = nil if wait_method == :none
 
 
         #1.  method     -- should be div / span / input etc.. etc..
@@ -117,14 +161,25 @@ class EasyriderConnection < Connection
 
         #first setup our find string
 
-        srch_string = search_string( how, what, match_type )
-        result      = start_element.send( method, how, srch_string )
+        srch_string      = search_string( how, what, match_type )
+        found_elements   = start_element.send( method, how, srch_string )
 
         debug("Connector using find..  Search Query: #{srch_string}")
 
-        result = result.respond_to?( :to_a ) ? result.to_a : [ result ]
-        result.delete_if{ |ele| !ele.exists? }
-        result.empty? ? nil : result.first
+        found_elements = found_elements.respond_to?( :to_a ) ? found_elements.to_a : [ found_elements ]
+
+        debug("Found Elements [ #{found_elements.length} ]")
+
+        #handle waiting for our elements here
+        #if we have waits specified
+        if wait_method
+            debug("Waiting for Elements [ #{found_elements.length} ] --- [ Wait Method: #{wait_method}, Timeout: #{wait_timeout} ] ")
+            wait_for_elements( found_elements, wait_method, wait_timeout )
+        end
+
+        remove_elements( found_elements, wait_method )
+        #found_elements.delete_if{ |ele| !ele.exists? }
+        found_elements.empty? ? nil : found_elements.first
 
     end
 

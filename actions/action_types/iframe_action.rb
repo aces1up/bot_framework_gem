@@ -7,7 +7,7 @@ class IframeAction < Action
     end
 
     def iframe_find_args()
-        Hash[* [ :iframe_method, :iframe_how, :iframe_what, :iframe_match_type ].map{ |data_arg|
+        Hash[* [ :iframe_method, :iframe_how, :iframe_what, :iframe_match_type, :iframe_wait_mode, :iframe_timeout ].map{ |data_arg|
                data_var = data_arg.to_s.gsub('iframe_','').to_sym
                [ data_var , @data[ data_arg ] ]
           }.flatten ]

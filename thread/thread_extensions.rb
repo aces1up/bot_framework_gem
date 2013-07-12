@@ -34,4 +34,9 @@ class Thread
           self[:vars].add( var_hash, var_container, overwrite )
       end
 
+      def teardown_thread_connections()
+          return if !self[:conns]
+          self[:conns].cleanup_all_connections
+      end
+
 end
