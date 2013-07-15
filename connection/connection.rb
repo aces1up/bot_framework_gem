@@ -124,6 +124,10 @@ class Connection
         raise FunctionNotImplemented
     end
 
+    def clear_cookies()
+        raise FunctionNotImplemented
+    end
+
 
     #image handling
     def image_urls()

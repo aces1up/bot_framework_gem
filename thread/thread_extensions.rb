@@ -14,6 +14,18 @@ class Thread
           key?(:vars)
       end
 
+      def has_connection_mediator?()
+          key?(:conns)
+      end
+
+      def connection_mediator()
+          self[:conns]
+      end
+
+      def connection_handle( conn_name=:agent )
+          connection_mediator[conn_name]
+      end
+
       def container_data( container )
           raise EnviornmentError, "Cannot Get Container Data for: #{container.inspect} -- No Var Mediator Set for Thread!" if !has_var_mediator?
           self[:vars].container_data( container )

@@ -8,8 +8,10 @@ class Action
 
     def initialize( data={} )
 
-        @data = data
+        @data  = data
+
         init()
+
         load_object_args( @data, false )
 
     end

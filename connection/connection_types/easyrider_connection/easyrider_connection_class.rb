@@ -71,6 +71,10 @@ class EasyriderConnection < Connection
 
     end
 
+    def clear_cookies()
+        @conn.cookies.clear
+    end
+
     #our FetchMethods
     def get( url, headers={} )
         @conn.get( url )
