@@ -11,7 +11,7 @@ class SaveRegex < Action
 
     def run()
         raise ActionError, 'Cannot Save Regex, no Search String Specified!' if !@search_string
-        raise ActionError, 'Cannot Save Regex, no Save Variable Specified!' if !@search_string
+        raise ActionError, 'Cannot Save Regex, no Save Variable Specified!' if !@save_var
 
         html =~ Regexp.new( @search_string )
         @save_val = $1

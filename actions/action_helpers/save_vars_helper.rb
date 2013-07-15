@@ -2,7 +2,7 @@
 
 module SaveVarsHelper
 
-    attr_accessor :save_to_temp, :save_var, :overwrite
+    attr_accessor :save_to_temp, :save_var, :overwrite, :save_val
 
     def do_save()
 
@@ -17,5 +17,6 @@ module SaveVarsHelper
         @save_to_temp  = true
         @overwrite     = true
         @save_var      = nil
+        @save_val      = nil
     end
 end

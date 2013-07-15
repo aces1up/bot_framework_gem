@@ -14,6 +14,7 @@ class IframeAction < Action
     end
 
     def manipulate( iframe )
+
         case @data[:manipulation_mode]
 
             when :set_element

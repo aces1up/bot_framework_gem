@@ -6,13 +6,12 @@ class TagSolver
     include Tags
     include TagSolverHelper
 
-    def initialize( tag, tag_args={} )
+    def initialize( tag=nil, tag_args={} )
 
         @tag      = tag
         @tag_args = tag_args
 
-        #puts "created tag object: #{self.obj_info} -- #{@tag} -- #{@tag_args.inspect}"
-        init_tag_args     #<--- need to fixup tag if this tag solver was not created via the hint solver
+        init_tag_args if tag  #<--- need to fixup tag if this tag solver was not created via the hint solver
 
     end
 
@@ -46,8 +45,18 @@ class TagSolver
         #goes out to our bio files and gets a random
         #element from the file that our var corresponds to
         #ex.  var == :first_name  --  Filename : bio/first_name.data
+
         bio_file = "#{BioDirectory}#{var.to_s}.data"
-        rand_file_line( bio_file )
+        data = rand_file_line( bio_file )
+
+        case var.to_sym
+            when :domain
+                domain_keys = [ :domain, :user, :pass, :server, :port ]
+                data.split(':').to_h( domain_keys )
+        else
+            data
+        end
+        
     end
 
     def is_bio_var?(tag)

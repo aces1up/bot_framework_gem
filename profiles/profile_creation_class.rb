@@ -34,17 +34,18 @@ class ProfileData
 
     def generate
 
-        username = "#{get_profile_var( :username )}#{rand(999)}"
-        domain   = get_profile_var( :domain )
-        email    = "#{username}@#{domain}"
+        username      = "#{get_profile_var( :username )}#{rand(999)}"
+        domain_hash   = TagSolver.new().get_bio_var( :domain )
+        email         = "#{username}@#{domain_hash[:domain]}"
 
         @profile = {
-            :username       =>    username,
-            :first_name     =>    get_profile_var( :first_name ),
-            :last_name      =>    get_profile_var( :last_name ),
-            :domain         =>    domain,
-            :email          =>    email,
-            :password       =>    random_password
+            :username         =>    username,
+            :first_name       =>    get_profile_var( :first_name ),
+            :last_name        =>    get_profile_var( :last_name ),
+            :domain           =>    domain_hash[:domain],
+            :catchall_data    =>    domain_hash,
+            :email            =>    email,
+            :password         =>    random_password
         }
     end
 

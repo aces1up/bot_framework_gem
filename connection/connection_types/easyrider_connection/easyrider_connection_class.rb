@@ -118,7 +118,15 @@ class EasyriderConnection < Connection
     end
 
     def wait_for_elements( elements, wait_method, wait_timeout )
-        elements.each do |element| wait_for_element( element, wait_method, wait_timeout ) end
+        elements.each do |element|
+            do_wait = case wait_method
+                when :wait_until_present  ;  element.exists?  ? false : true
+                when :wait_while_present  ;  !element.exists? ? false : true
+            end
+
+            wait_for_element( element, wait_method, wait_timeout ) if do_wait
+
+        end
     end
 
     def remove_elements( elements, wait_method )

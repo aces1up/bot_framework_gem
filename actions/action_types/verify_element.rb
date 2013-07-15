@@ -5,7 +5,14 @@ class VerifyElement < Action
     def init()
         init_element_vars()
     end
-
+=begin
+    #handle waiting for our elements here
+        #if we have waits specified
+        if wait_method
+            debug("Waiting for Elements [ #{found_elements.length} ] --- [ Wait Method: #{wait_method}, Timeout: #{wait_timeout} ] ")
+            wait_for_elements( found_elements, wait_method, wait_timeout )
+        end
+=end
     def run()
 
         @what = solve_tag( @what )

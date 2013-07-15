@@ -52,7 +52,7 @@ PhantomJSEXE = 'c:/temp/phantomjs.exe'
 class LoginTest
 
     include BotFrameWorkModules
-    include Hardware
+    include HardwareHelper
 
      def initialize()
         @connection_class = EasyriderConnection
@@ -69,10 +69,11 @@ class LoginTest
         #puts result.inspect
         puts "os : #{os.inspect}"
 
-
         init_vars
-        get('http://linkwheelbandit.com/files/iframe.htm')
-        hard_kill
+        #get('http://linkwheelbandit.com/files/iframe.htm')
+        #hard_kill
+
+        puts ProfileData.new.get_profile.inspect
 
 
      end
