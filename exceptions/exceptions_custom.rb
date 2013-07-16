@@ -87,6 +87,8 @@ class DeadSite          < GeneralAppException    ; end
 class RawPostError      < GeneralAppException    ; end
 class ActionError       < GeneralAppException    ; end
 class FunctionError     < GeneralAppException    ; end
+class ContentError      < GeneralAppException    ; end
+
 class LoginError        < GeneralAppException    
     def status_msg() ; :login_error end
 end

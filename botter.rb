@@ -36,8 +36,19 @@ require 'args/args_helper'
 require 'enviornment/enviornment_helper'
 require 'enviornment/enviornment_module'
 
+#global Settings
+require 'global/global_wrapper'
+require 'global/global_class'
+
+#content Parsers
+require 'content_parsers/spinner/spinner_class'
+require 'content_parsers/article_sanitizer_module'
+require 'content_parsers/fetchers/default_fetcher'
+require 'content_parsers/fetchers/ondisk_fetcher'
+
 #our tag Handlers
 require 'tags/tag_solver/tag_groups/file_handling_tags'
+require 'tags/tag_solver/tag_groups/article_tags/article_tag_handler'
 require 'tags/tag_solver/tag_groups/bio_tags'
 require 'tags/tag_solver/tag_solver_helper'
 require 'tags/tag_solver/tags'
@@ -48,10 +59,6 @@ require 'parsers/raw_post_parser/packet_loader'
 require 'parsers/raw_post_parser/multipart_parser/part_element_class'
 require 'parsers/raw_post_parser/multipart_parser/mulit_part_parser_class'
 require 'parsers/raw_post_parser/urlencoded_parser/urlencoded_parser_class'
-
-#content Parsers
-require 'content_parsers/spinner/spinner_class'
-
 
 #Our Connections and Wrappers
 require 'connection/elements/element_wrapper'
@@ -89,9 +96,6 @@ require 'connection/connection_types/easyrider_connection/elements/easyrider_inp
 
 #exceptions
 require 'exceptions/exceptions_custom'
-
-#global Settings
-require 'global/global_class'
 
 #startup our enviornment here
 require 'startup_enviornment'   #<--- this handles loading of our global settings

@@ -5,6 +5,7 @@ module BotFrameWorkModules
     include ConnectionWrapper
     include TagSolverHelper
     include LogHandler
+    include GlobalWrapper
 end
 
 class Class

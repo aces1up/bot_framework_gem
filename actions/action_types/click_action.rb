@@ -7,7 +7,7 @@ class ClickElement < Action
 
     def run()
         found = VerifyElement.new( @data ).run
-        info "Clicking Found Elmement: #{found.obj_info}"
+        info "Clicking Found Element: #{found.obj_info}"
         found.click
     end
 

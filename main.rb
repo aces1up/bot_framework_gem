@@ -67,13 +67,26 @@ class LoginTest
         
         #result = `ping www.google.com`
         #puts result.inspect
-        puts "os : #{os.inspect}"
+        #puts "os : #{os.inspect}"
 
         init_vars
         #get('http://linkwheelbandit.com/files/iframe.htm')
         #hard_kill
 
-        puts ProfileData.new.get_profile.inspect
+        #puts ProfileData.new.get_profile.inspect
+        #var = global_var( :content_location )
+        #puts "location : #{var.inspect}"
+
+        #puts self[:article_title].inspect
+        #puts self[:article_text].inspect
+        title  = solve_tag( '~~article_title~~' )
+        title2 = solve_tag( '~~article_title~~' )
+        puts "title #{title}"
+        #make sure title2 == title should not try and
+        #get a new title
+        puts "title2: #{title2}"
+        puts "text : #{solve_tag('~~article_text~~')}"
+
 
 
      end

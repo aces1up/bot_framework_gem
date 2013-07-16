@@ -1,6 +1,7 @@
 
 
 class Spinner
+
     SpinRegex = /{[^{}]+?}/
     MaxSpinLevels = 25
 
@@ -19,7 +20,7 @@ class Spinner
         (text =~ SpinRegex).nil?
     end
 
-    def spin(orig_text)
+    def spin( orig_text )
 
       text = orig_text.dup
 

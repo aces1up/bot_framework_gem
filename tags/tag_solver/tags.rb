@@ -21,6 +21,18 @@ module Tags
 
 
     end
+    
+    def get_content( content_tag )
+        ArticleTagHandler.new( content_tag, @tag_args ).return_content
+    end
+
+    def article_text()
+        get_content( :article_text )
+    end
+
+    def article_title()
+        get_content( :article_title )
+    end
 
     
 

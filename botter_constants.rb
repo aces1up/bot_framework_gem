@@ -25,6 +25,9 @@ DefaultBOTSettings =
     :DefaultCaptchaService   =>  :decaptcher,
     :MaxCaptchRetry          =>  5,       #<--- max times we retry a captcha service.
 
+    #Content Settings
+    :content_location        => :ondisk
+
 }
 
 

@@ -90,17 +90,6 @@ class TagSolver
                     tag_match
                 end
 
-=begin
-                if tag_solved != tag_match
-                    #if tag_solved != tag_match then we retreived a NEW fresh solved variables
-                    #so set an enviornment variable here so we can retrieve them later
-                    case
-                        when is_bio_var?( tag_match )
-                            #if its a bio var then lets save this to acct vars
-                            self.add( { tag_match.to_sym => tag_solved }, :acct )
-                    end
-                end
-=end
                 tag_solved
 
             end
