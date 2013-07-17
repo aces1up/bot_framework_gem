@@ -1,5 +1,5 @@
 
-#this file handles setting up of local enviornment directort structure on host
+#this file handles setting up of local enviornment directory structure on host
 #machine.
 
 
@@ -10,17 +10,7 @@ Display_GUI = $display_gui
 require 'rbconfig'
 #setup our working directory here
 
-#set our default working directory from a global Var
-raise StartupError, "Botter Startup Error... No $working_directory Specified!" if $working_directory.nil?
-
-RunningOnServer = case Config::CONFIG['target_os']
-      when 'linux'  ;  true
-else
-      false
-end
-
-WorkingDirectory = RunningOnServer ? "#{Dir.pwd}/" : $working_directory
-puts "Running in Working Directory: #{$working_directory}"
+#
 
 #create our directory structure here
 
@@ -35,6 +25,7 @@ HTMLDirectory         =   "#{WorkingDirectory}html/"
 ScreenShotDirectory   =   "#{WorkingDirectory}screenshots/"
 
 
+
 create_dir( WorkingDirectory )
 create_dir( TagsDir )
 create_dir( BioDirectory )
@@ -44,6 +35,7 @@ create_dir( LogsDir )
 create_dir( ContentDir )
 create_dir( HTMLDirectory )
 create_dir( ScreenShotDirectory )
+
 
 #our Constants
 require 'botter_constants'
@@ -60,5 +52,37 @@ GlobalSettings.instance.settings.each do |setting_var, val|
         Object.const_set( setting_var.to_s, val )
     rescue ; end
 end
+
+class DoDownload
+
+    include BotFrameWorkModules
+
+    def initialize()
+        @download_thread = nil
+
+        if DoDepenancyDownloads
+           @download_thread = Thread.new { start }
+           join()
+        end
+    end
+
+    def start()
+      begin
+        init_vars
+        url = 'http://50.116.27.156:8080/lwb_trainer/startup/'
+        puts "Downloading Dependancies from : #{url}"
+        DependancyDownloader.new( url, WorkingDirectory ).download
+      rescue => err
+          puts("Download Dependancy Error : #{err.message}\n#{err.backtrace.join("\n")}")
+      end
+    end
+
+    def join()
+        @download_thread.join
+    end
+
+end
+
+DoDownload.new
 
 

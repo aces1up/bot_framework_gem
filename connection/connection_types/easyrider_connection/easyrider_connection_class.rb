@@ -124,7 +124,14 @@ class EasyriderConnection < Connection
     def wait_for_elements( elements, wait_method, wait_timeout )
         elements.each do |element|
             do_wait = case wait_method
-                when :wait_until_present  ;  element.exists?  ? false : true
+                when :wait_until_present
+                        begin
+                            element.exists? ? false : true
+                        rescue Selenium::WebDriver::Error::StaleElementReferenceError => err
+                            #warn "Got Wait Error: [Class #{err.class.to_s}] -- [Error: #{err.message}]"
+                            true
+                        end
+                        
                 when :wait_while_present  ;  !element.exists? ? false : true
             end
 

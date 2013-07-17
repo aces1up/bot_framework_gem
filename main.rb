@@ -42,10 +42,12 @@ $display_gui       = false
   #PROLLY SHOULDN'T HAVE THIS IN THIS GEM AFTER DONE TESTING
   $LOAD_PATH << 'C:\Ruby Code\easy_rider\lib'
 
+
+
 require 'botter'
 
-PhantomJSEXE = 'c:/temp/phantomjs.exe'
 
+PhantomJSEXE = 'c:/temp/phantomjs.exe'
 
 
 
@@ -70,7 +72,8 @@ class LoginTest
         #puts "os : #{os.inspect}"
 
         init_vars
-        #get('http://linkwheelbandit.com/files/iframe.htm')
+        get('http://weebly.com')
+        puts html
         #hard_kill
 
         #puts ProfileData.new.get_profile.inspect
@@ -79,13 +82,13 @@ class LoginTest
 
         #puts self[:article_title].inspect
         #puts self[:article_text].inspect
-        title  = solve_tag( '~~article_title~~' )
-        title2 = solve_tag( '~~article_title~~' )
-        puts "title #{title}"
+        #title  = solve_tag( '~~article_title~~' )
+        #title2 = solve_tag( '~~article_title~~' )
+        #puts "title #{title}"
         #make sure title2 == title should not try and
         #get a new title
-        puts "title2: #{title2}"
-        puts "text : #{solve_tag('~~article_text~~')}"
+        #puts "title2: #{title2}"
+        #puts "text : #{solve_tag('~~article_text~~')}"
 
 
 

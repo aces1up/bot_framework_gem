@@ -1,10 +1,15 @@
 
+#set our default working directory from a global Var
+raise "Botter Startup Error... No $working_directory Specified!" if $working_directory.nil?
 
-puts "Current Run Directory: #{Dir.pwd}"
+RunningOnServer   =  Config::CONFIG['target_os'] =~ /linux/ ? true : false
+WorkingDirectory  =  RunningOnServer ? "#{Dir.pwd}/" : $working_directory
+puts "Running in Working Directory: #{$working_directory}"
+
+
 
 #require 'rubygems'
 require 'mechanize'
-require 'easy_rider'
 require 'singleton'
 require 'thread_safe'
 require 'yaml'
@@ -15,19 +20,11 @@ require 'addressable/uri'
 require 'securerandom'
 require 'mail'
 
-
 #our Thread Extensions
 require 'thread/thread_extensions'
 
 #our logger
 require 'logger/log_handler'
-
-#our hardware helper
-require 'hardware/os/os_resolver'
-require 'hardware/enviornment/enviornment_variables'
-require 'hardware/browser/browser_helper'
-require 'hardware/process/process_helper'
-require 'hardware/hardware_module'
 
 #args helper
 require 'args/args_helper'
@@ -59,6 +56,21 @@ require 'parsers/raw_post_parser/packet_loader'
 require 'parsers/raw_post_parser/multipart_parser/part_element_class'
 require 'parsers/raw_post_parser/multipart_parser/mulit_part_parser_class'
 require 'parsers/raw_post_parser/urlencoded_parser/urlencoded_parser_class'
+
+#our hardware helper
+require 'hardware/os/os_resolver'
+require 'hardware/os/arch_resolver'
+require 'hardware/enviornment/enviornment_variables'
+require 'hardware/browser/browser_helper'
+require 'hardware/process/process_helper'
+require 'hardware/hardware_module'
+require 'hardware/splash_update_module'
+require 'hardware/extractor/extractor_class'
+require 'hardware/dependancies/checksum_class'
+require 'hardware/dependancies/directory_html_helper'
+require 'hardware/dependancies/directory_link'
+require 'hardware/dependancies/http_uri_stats'
+require 'hardware/dependancies/downloader_class'
 
 #Our Connections and Wrappers
 require 'connection/elements/element_wrapper'
@@ -97,8 +109,18 @@ require 'connection/connection_types/easyrider_connection/elements/easyrider_inp
 #exceptions
 require 'exceptions/exceptions_custom'
 
+#our Var Mediator
+require 'variable_mediator/default_variable_container'
+require 'variable_mediator/var_mediator_class'
+
 #startup our enviornment here
 require 'startup_enviornment'   #<--- this handles loading of our global settings
+
+#require easy rider as it needs watir webdriver
+#and that is setup via our dependancy downloader in our
+#startup_enviorment above.
+require 'easy_rider'
+
 
 #Thread Pool
 require 'threadpool/pool'
@@ -125,9 +147,7 @@ require 'cache/proxy/proxy_tester'
 require 'cache/proxy/proxy_sync_modules'
 require 'cache/proxy/proxy_cache'
 
-#our Var Mediator
-require 'variable_mediator/default_variable_container'
-require 'variable_mediator/var_mediator_class'
+
 
 #our Actions
 require 'actions/action_helpers/save_vars_helper'

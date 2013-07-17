@@ -11,7 +11,7 @@ module ExecuteConnectorNormalCall
             conn_handle.send( method, *args )
 
         rescue => err
-            raise FatalConnectionError, err.message
+            raise FatalConnectionError, err.message, err.backtrace
         end
 
     end

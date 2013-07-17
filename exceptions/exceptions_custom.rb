@@ -30,7 +30,7 @@ class FatalAppError < StandardError
     def report_gui( thread )
         #set the error directly on thread vars
         #using our thread var mediator access methods.
-        err_msg = "#{self.class.to_s} -- #{message}"
+        err_msg = "#{self.class.to_s} -- #{message} -- #{backtrace}"
         error( err_msg, thread )
     end
 
