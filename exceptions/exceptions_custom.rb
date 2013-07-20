@@ -24,14 +24,13 @@ class FatalAppError < StandardError
     def status_msg() ; :fatal ; end
 
     def msg()
-        "[Error: #{message}]\n[Backtrace: #{backtrace.join("\n")}]"
+        "[ Error Type: #{} ] [ Error: #{message} ]\n[Backtrace: #{backtrace.join("\n")}]"
     end
 
     def report_gui( thread )
         #set the error directly on thread vars
         #using our thread var mediator access methods.
-        err_msg = "#{self.class.to_s} -- #{message} -- #{backtrace}"
-        error( err_msg, thread )
+        error( msg, thread )
     end
 
     def report( thread=nil )
@@ -47,7 +46,7 @@ class FatalAppError < StandardError
 
         #puts "Exception : #{msg}"
 
-        report_gui( thread ) if Display_GUI
+        report_gui( thread )
     end
 
 end

@@ -14,7 +14,7 @@ module LogHandler
             thread ||= Thread.current
             return if !log_handler.respond_to?( :update_msg )
 
-            log_handler.update_msg( msg, log_level, thread )
+            log_handler.update_msg( msg_str( log_level, msg ), log_level, thread )
 
         else
             msg_output = msg_str( log_level, msg )
@@ -36,19 +36,16 @@ module LogHandler
 
     def info( msg="" )
         return if !log_level_met?( :info )
-        msg = msg_str( :info, msg )
         do_log( :info, msg )
     end
 
     def warn( msg="" )
         return if !log_level_met?( :warn )
-        msg = msg_str( :warn, msg )
         do_log( :warn, msg )
     end
 
     def debug( msg="" )
         return if !log_level_met?( :debug )
-        msg = msg_str( :debug, msg )
         do_log( :debug, msg )
     end
 

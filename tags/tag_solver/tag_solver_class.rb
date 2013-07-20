@@ -5,6 +5,7 @@ class TagSolver
     include Enviornment
     include Tags
     include TagSolverHelper
+    include DefaultTagHandler
 
     def initialize( tag=nil, tag_args={} )
 
@@ -62,6 +63,19 @@ class TagSolver
     def is_bio_var?(tag)
         BioVars.include?( tag.to_sym )
     end
+
+    def parse_default_tag_options( tag_solved )
+
+        return tag_solved if @tag_args.empty?
+
+        @tag_args.each do | tag_var, value |
+            next if !respond_to?( tag_var )
+            tag_solved = send( tag_var, tag_solved, value )
+        end
+
+        tag_solved
+
+    end
     
     def parse_tag()
 
@@ -90,7 +104,8 @@ class TagSolver
                     tag_match
                 end
 
-                tag_solved
+                parse_default_tag_options( tag_solved )
+                
 
             end
         }

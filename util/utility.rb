@@ -16,6 +16,13 @@ class Class
   end
 end
 
+class String
+
+  def truncate_words( num_words )
+      self.include?(' ') ? self.split(' ')[0..num_words].join(' ') : self
+  end
+end
+
 class Fixnum
   def negative?()
       self < 0
