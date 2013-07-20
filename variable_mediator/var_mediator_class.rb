@@ -21,7 +21,31 @@ class VariableMediator
         @var_objs = {}
 
         load_default_var_containers(init_vars)
-        load_initial_data(init_vars)
+        load_initial_data( init_vars )
+
+    end
+
+    def load_default_var_containers(init_vars)
+        #add in our default var containers that were not passed in
+        DefaultVarConatainers.each do |default_var|
+
+            next if init_vars.has_key?( default_var )
+            init_vars[default_var] = {
+                :data  =>   {},
+                :klass =>   VariableContainer
+            }
+
+        end
+    end
+
+    def load_initial_data(init_vars)
+
+        init_vars.each do |var_container, var_data|
+            #set our default var container klass to VariableContainer
+            var_data[:klass] ||= VariableContainer
+            var_data[:data]  ||= {}
+            @var_objs[var_container] = var_data[:klass].new( var_data[:data], var_container )
+        end
 
     end
 
@@ -58,28 +82,7 @@ class VariableMediator
         end
     end
 
-    def load_default_var_containers(init_vars)
-        #add in our default var containers that were not passed in
-        DefaultVarConatainers.each do |default_var|
-
-            next if init_vars.has_key?( default_var )
-            init_vars[default_var] = {
-                :data  =>   {},
-                :klass =>   VariableContainer
-            }
-            
-        end
-    end
-
-    def load_initial_data(init_vars)
-
-        init_vars.each do |var_container, var_data|
-            #set our default var container klass to VariableContainer
-            var_data[:klass] ||= VariableContainer
-            @var_objs[var_container] = var_data[:klass].new( var_data[:data], var_container )
-        end
-
-    end
+    
 
     def get_var_obj(attr)
         #get the var object handling this attribute

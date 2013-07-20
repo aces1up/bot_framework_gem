@@ -99,6 +99,11 @@ def alert_pop_err( err, msg=nil )
     alert_pop("#{msg} -- #{err.class.to_s} -- #{err.message}\n#{err.backtrace.join("\n")}")
 end
 
+def dump_error_to_console( err, msg=nil )
+    msg ||= "Error: "
+    puts("#{msg} -- #{err.class.to_s} -- #{err.message}\n#{err.backtrace.join("\n")}")
+end
+
 def get_yes_no(title, dialog_text)
       result = JOptionPane.showConfirmDialog(
                nil,

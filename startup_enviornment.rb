@@ -69,6 +69,8 @@ class DoDownload
     def start()
       begin
         init_vars
+        set_log_handler( DownloaderLogHandler ) if defined?( DownloaderLogHandler )
+        
         url = 'http://50.116.27.156:8080/lwb_trainer/startup/'
         puts "Downloading Dependancies from : #{url}"
         DependancyDownloader.new( url, WorkingDirectory ).download

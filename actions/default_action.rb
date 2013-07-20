@@ -6,11 +6,11 @@ class Action
     include SaveVarsHelper
     include ElementVarsHelper
 
-    def initialize( data={} )
+    def initialize( data={}, init_data=true )
 
         @data  = data
 
-        init()
+        init() if init_data
 
         load_object_args( @data, false )
 

@@ -4,6 +4,8 @@ raise "Botter Startup Error... No $working_directory Specified!" if $working_dir
 
 RunningOnServer   =  Config::CONFIG['target_os'] =~ /linux/ ? true : false
 WorkingDirectory  =  RunningOnServer ? "#{Dir.pwd}/" : $working_directory
+PhantomJSEXE      = "#{$working_directory}dependencies/phantomjs.exe"
+
 puts "Running in Working Directory: #{$working_directory}"
 
 
