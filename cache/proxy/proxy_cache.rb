@@ -37,7 +37,7 @@ class ProxyCache
     end
 
     def time_to_reload()
-        ( @last_reload + ProxyCacheReloadInterval) - Time.now.to_i
+        ( @last_reload + ProxyCacheReloadInterval ) - Time.now.to_i
     end
 
     def do_reload?()

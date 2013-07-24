@@ -45,6 +45,14 @@ class EasyriderDefault < Element
         @element.send_keys( *val )
     end
 
+    def set_key( key )
+        @element.send_keys key.to_sym
+    end
+
+    def fire_event( event )
+        @element.fire_event( event )
+    end
+
     def click()
         @element.click
     end

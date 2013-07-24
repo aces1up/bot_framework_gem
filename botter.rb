@@ -172,10 +172,6 @@ require 'actions/raw_post/header_parser_module'
 require 'actions/raw_post/post_body_parser'
 require 'actions/raw_post/raw_post_action'
 
-#functions
-require 'functions/function_helper_module'
-require 'functions/function_class'
-
 #GUI REQUIRES
 require 'gui/handlers/table/jtable_getvalue_helper'
 require 'gui/handlers/table/uuid_var_jtable_handler'

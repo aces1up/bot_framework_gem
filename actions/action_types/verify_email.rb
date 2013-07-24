@@ -54,6 +54,8 @@ class VerifyEmail < Action
 
     def check()
 
+        info("Checking Email -- Retry [ #{@retry_count} / #{@email_retry} ]")
+
         #returns found email if we match
         @pop.find( :what => :last, :count => 10, :order => :desc ).each do |message|
 
@@ -74,8 +76,9 @@ class VerifyEmail < Action
     end
 
     def connect()
-        info("Connecting to Email Server: #{@creds[:server]}")
+        info("Connecting to Email Server Using: #{email_settings.inspect}")
         @pop = Mail::POP3.new( email_settings )
+        info("Connected to Email Server!")
     end
 
     def run()
@@ -86,7 +89,6 @@ class VerifyEmail < Action
         while ( !found_email? and !retry_met? )
             begin
 
-                info("Checking Email -- Retry [ #{@retry_count} / #{@email_retry} ]")
                 connect()
                 check()
                 cleanup()
@@ -96,6 +98,7 @@ class VerifyEmail < Action
             rescue => err
                cleanup
                @err = err
+               warn( "Got Email Err: #{err.message}" )
 
                if !retry_met?
                   do_retry

@@ -23,16 +23,12 @@ class ClickElement < Action
         rescue Selenium::WebDriver::Error::UnknownError => err
 
             if err.message.include?('Click succeeded but Load Failed')
-                if do_retry?
-                    warn("Got Click Fail -- Retrying in #{@retry_interval} Seconds.. [ #{@retry_count} / 5 ]")
-                    sleep( @retry_interval )
-                    retry
-                else
-                    raise
-                end
+                #if do_retry?
+                #    warn("Got Click Fail -- Retrying in #{@retry_interval} Seconds.. [ #{@retry_count} / 5 ]")
+                warn 'Got Click Fail from Browser.. But Page Probably Still has loaded...'
+                #    sleep( @retry_interval )
+                #    retry
             else
-                #re-raise the error here it its not a click error
-                #we know how to rescue.
                 raise
             end
 

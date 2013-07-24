@@ -47,6 +47,12 @@ def dir_files( dir, recursive=false, include_directories=false )
     Dir[search_pattern].delete_if{ |file| !include_directories and File.directory?( file ) }
 end
 
+def sub_directories( root_dir )
+    #all Immediate subdirectories of root dir
+    dir = root_dir[-1,1] == '/' ? root_dir : "#{root_dir}/"
+    Dir.glob("#{dir}*/")
+end
+
 def random_dir( dir )
 
     #attempts to get a random file from directory

@@ -12,7 +12,6 @@ module EnviornmentHelper
 
     def set_status( status )
         set_env_var( :status, status, :site ) if has_var_mediator?
-        update_gui()
     end
     
     def set_log_handler( obj )

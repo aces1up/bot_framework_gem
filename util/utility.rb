@@ -16,6 +16,12 @@ class Class
   end
 end
 
+class Hash
+    def sample()
+        self[ self.keys.sample ]
+    end
+end
+
 class String
 
   def truncate_words( num_words )
