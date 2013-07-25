@@ -2,12 +2,28 @@
 
 module EnviornmentHelper
 
+    def set_profile( profile_data )
+        add( profile_data, :acct, true, true )
+    end
+
     def set_env_var(var, val, container=:temp)
         add( {var => val}, container )
     end
 
     def set_function( function_name )
         set_env_var( :function, function_name, :site )
+    end
+
+    def set_platform( platform )
+        set_env_var( :platform, platform, :site )
+    end
+
+    def set_footprint( footprint )
+        set_env_var( :footprint, footprint, :site )
+    end
+
+    def set_error( err )
+        set_env_var( :error, err, :site )
     end
 
     def set_status( status )
@@ -27,7 +43,7 @@ module EnviornmentHelper
         #var --> :gui_loc
         return nil if !has_var_mediator? and !thread
 
-        handler = thread ? thread.get_var( :log_handler ) : self[:log_handler]
+        handler = thread ? thread.get_var( :log_handler ) : get_env_var( :log_handler )
 
         handler ? handler : nil
     end

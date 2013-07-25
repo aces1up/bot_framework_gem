@@ -97,6 +97,12 @@ module Enviornment
         Thread.current[:vars].add( var_hash, var_container, overwrite, reset_container )
     end
 
+    def get_env_var( attr )
+        validate(attr)
+
+        Thread.current[:vars].send( :[], attr )
+    end
+
 
     def [](attr)
         validate(attr)

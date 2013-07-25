@@ -24,7 +24,7 @@ class FatalAppError < StandardError
     def status_msg() ; :fatal ; end
 
     def msg()
-        "[ Error Type: #{} ] [ Error: #{message} ]\n[Backtrace: #{backtrace.join("\n")}]"
+        "[ Error: #{message} ]\n[Backtrace: #{backtrace.join("\n")}]"
     end
 
     def report_gui( thread )
@@ -45,7 +45,7 @@ class FatalAppError < StandardError
         @logger.fatal( msg )
 
         #puts "Exception : #{msg}"
-
+        set_error( msg )
         report_gui( thread )
     end
 
@@ -59,7 +59,9 @@ class GeneralAppException < FatalAppError
     end
 
     def status_msg() ; :error end
-
+    def msg()
+        "[ Error: #{message} ]"
+    end
 end
 
 class BotThreadTimeout  < GeneralAppException

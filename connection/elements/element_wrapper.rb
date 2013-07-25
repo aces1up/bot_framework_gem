@@ -10,7 +10,7 @@ module ElementWrapper
 
         klass = element.class.to_s.downcase
 
-        puts "got element type: #{klass.inspect}"
+        #puts "got element type: #{klass.inspect}"
 
         case
             when klass =~ /form/   ; :form

@@ -68,7 +68,7 @@ class DecaptcherSolver < CaptchaService
 
         res_split = html.split('|')
 
-        puts("Response Split: #{res_split.inspect} -- Length: #{res_split.length}")
+        debug("Response Split: #{res_split.inspect} -- Length: #{res_split.length}")
 
         if res_split.length != 6 then
             #set up our error codes here
@@ -152,7 +152,7 @@ class DecaptcherSolver < CaptchaService
 
     def solve()
 
-        puts("[Decaptcher Service] -- Solving Captcha -- Retry : #{@retry}")
+        info("[Decaptcher Service] -- Solving Captcha -- Retry : #{@retry}")
 
         if max_retries_met?()
 

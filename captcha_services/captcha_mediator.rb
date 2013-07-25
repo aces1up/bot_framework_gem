@@ -70,11 +70,11 @@ class CaptchaMediator
     end
 
     def solve()
-        puts("[Captcha Solver] -- Loading Captcha Service")
+        info("[Captcha Solver] -- Loading Captcha Service")
 
         #first load our image data
         load_image_data()
-        puts("Loaded Image Data -- #{@image_data.length} Bytes")
+        info("Loaded Image Data -- #{@image_data.length} Bytes")
 
         #load our services here
         load_services()

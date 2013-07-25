@@ -33,7 +33,7 @@ class CaptchaService
 
     def solve()
         @retry += 1
-        puts("Doing Captcha Service POST here")
+        debug("Doing Captcha Service POST here")
         #info("Sending Post Data:\n#{@post_data.to_s}")
 
         #set up a temp agent for processing our captcha image
