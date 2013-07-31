@@ -25,6 +25,10 @@ class GlobalSettings
         @loaded = true
     end
 
+    def set_constants()
+        @settings.set_constants
+    end
+
     def merge_settings( settings={}, overwrite_if_exists=false )
         load()
 
@@ -36,7 +40,7 @@ class GlobalSettings
     end
 
     def save()
-        File.open(SettingsFile, 'w') do |out| YAML.dump(@settings, out) end
+        File.open(SettingsFile, 'w') do |out| YAML.dump( @settings, out ) end
     end
 
     def set_var( var, value, save_settings=false )

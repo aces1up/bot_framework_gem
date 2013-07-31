@@ -17,8 +17,60 @@ class Class
 end
 
 class Hash
-    def sample()
+      def sample()
         self[ self.keys.sample ]
+      end
+
+      def set_constants()
+          each do |key, val|
+
+              begin  Object.send( :remove_const, key.to_s )   ; rescue ; end
+              begin  Object.const_set( key.to_s, val )      ; rescue ; end
+          end
+      end
+
+      def all_keys_are_integers?()
+          keys.all?{ |key| key.is_a?(Fixnum) or ( key.is_a?(String) and key.is_integer? ) }
+      end
+
+      def prepend_keys( pre_str )
+          Hash[ self.map{ |k, v| [ "#{pre_str}#{k.to_s}".to_sym, v] } ]
+      end
+
+      def prepend_keys!( pre_str )
+          replace( prepend_keys( pre_str ) )
+      end
+
+      #def prepend_keys!( pre_str )
+      #    self.each { |k, v| self[k] = v.upcase }
+      #end
+
+    def to_rehash
+        #collects all keys that have integers on the end of their
+        #keys and creates a new subhash from them inside this hash
+        self.inject( {} ) { | h, (key, val) |
+          if key.to_s[-1].is_integer?
+            keyindex = key.to_s[-1].to_i
+            keyname  = key.to_s[0..-2].to_sym
+            h[ keyname ] ||= {}
+            h[ keyname ][ keyindex ] = val
+          else
+            h[key] = val
+          end
+          h
+        }
+    end
+
+    def from_rehash()
+        self.inject( {} ) { | h, (key, val) |
+
+          if val.is_a?(Hash) and val.all_keys_are_integers?
+            h.merge!( val.prepend_keys( key ) )
+          else
+            h[key] = val
+          end
+          h
+        }
     end
 end
 
@@ -27,6 +79,65 @@ class String
   def truncate_words( num_words )
       self.include?(' ') ? self.split(' ')[0..num_words].join(' ') : self
   end
+
+  def is_integer?
+      !!(self =~ /^[-+]?[0-9]+$/)
+  end
+
+  def strip_non_letters
+      self.gsub(/[^a-zA-Z]/i, ' ')
+  end
+
+  def remove_whitespace
+      self.gsub(/\s+/, ' ').strip
+  end
+
+  def sanitize_title
+      strip_non_letters.remove_whitespace
+  end
+
+  def remove_non_ascii(replacement="")
+      self.gsub!(/[\x80-\xff]/,replacement)
+  end
+
+  def to_utf8( )
+      self.encode( 'UTF-8', :invalid => :replace, :undef => :replace, :replace => '' )
+  end
+
+  def indices( e )
+      start, result = -1, []
+      result << start while start = ( self.index e, start + 1 )
+      result
+  end
+
+  def indices_start_end( e )
+      match_all( e ).map{ |match| [ match.begin(0), match.end(0)-1 ] }
+  end
+
+  def match_all(regex)
+      if block_given?
+        scan(regex) { yield $~ }
+      else
+        enum_for(:scan, regex).map { $~ }
+      end
+  end
+
+
+
+  def is_float?
+    # The double negation turns this into an actual boolean true - if you're
+    # okay with "truthy" values (like 0.0), you can remove it.
+    !!Float(self) rescue false
+  end
+
+  def cap_words
+    self.split(' ').map {|w| w.capitalize }.join(' ')
+  end
+
+  def word_count
+      self.split(' ').length
+  end
+
 end
 
 class Fixnum
@@ -100,6 +211,19 @@ end
 
 def dbase_open_connections
     ActiveRecord::Base.connection_pool.connections.length
+end
+
+def checkin_dbase( thread=nil )
+    thread ||= Thread.current
+    ActiveRecord::Base.connection_pool.release_connection( thread.object_id )
+end
+
+def active_connection?()
+    ActiveRecord::Base.connection_pool.active_connection?
+end
+
+def clear_stale_dbase
+    ActiveRecord::Base.connection_pool.clear_stale_cached_connections!
 end
 
 def alert_pop( message, title=nil )

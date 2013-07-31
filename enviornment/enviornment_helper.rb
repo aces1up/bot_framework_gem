@@ -2,6 +2,10 @@
 
 module EnviornmentHelper
 
+    def clear_profile()
+        clear_container( :acct )
+    end
+
     def set_profile( profile_data )
         add( profile_data, :acct, true, true )
     end

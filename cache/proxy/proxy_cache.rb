@@ -6,7 +6,8 @@ class ProxyCache
     include ProxySync
     include ProxyTester
 
-    attr_reader :cache
+    attr_reader   :cache
+    attr_accessor :last_reload
 
     def initialize()
         @cache = ThreadSafe::Hash.new       #cache of our Proxies
@@ -70,12 +71,15 @@ class ProxyCache
     end
 
     def reload()
+      
         @last_reload = Time.now.to_i
         load_proxies
 
-        init_test_threads()
+        if TestProxies
+            init_test_threads()
+            wakeup_test_threads
+        end
 
-        wakeup_test_threads
         update_gui()
     end
     
@@ -86,7 +90,6 @@ class ProxyCache
     end
 
     def get_proxy( get_success_only=false )
-
 
         return :local if !UseProxyCache
         return :local if !ProxyFile

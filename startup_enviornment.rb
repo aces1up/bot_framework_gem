@@ -47,11 +47,14 @@ SettingsFile       =   "#{WorkingDirectory}settings.txt"
 GlobalSettings.instance.merge_settings( DefaultBOTSettings )
 
 #Setup our Constants here from GlobalSettings
+GlobalSettings.instance.set_constants
+=begin
 GlobalSettings.instance.settings.each do |setting_var, val|
     begin
         Object.const_set( setting_var.to_s, val )
     rescue ; end
 end
+=end
 
 class DoDownload
 

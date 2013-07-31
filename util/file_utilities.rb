@@ -4,6 +4,10 @@ def file_contents(filename)
     IO.read( filename )
 end
 
+def file_contents_utf8( filename )
+    file_contents( filename ).to_utf8
+end
+
 def is_full_path?( filename )
     #detects if the filename sent has a directory specified with
     #it or if its just single file

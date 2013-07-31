@@ -24,6 +24,8 @@ require 'mail'
 
 #our Thread Extensions
 require 'thread/thread_extensions'
+require 'threadpool/thread_pool_each'
+
 
 #our logger
 require 'logger/log_handler'

@@ -15,6 +15,7 @@ DefaultBOTSettings =
     :ProxyCacheReloadInterval     =>  600,     #<---- reload proxies every 10 minutes.
     :MaxProxytoLoadPerInterval    =>  500,
     :MaxProxyTestThreads          =>   10,
+    :TestProxies                  =>  true,
 
     #connection Settings
     :SwitchUserAgent   =>  false,
