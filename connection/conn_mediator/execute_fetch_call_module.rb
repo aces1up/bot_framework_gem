@@ -33,7 +33,8 @@ module ExecuteConnectorFetchCall
             retry_count ||= 0
             retry_count += 1
 
-            if retry_count > MaxConnectRetries
+            #don't run a retry if we are using local proxy here
+            if ( conn_handle.use_local_proxy or retry_count > MaxConnectRetries )
                #we have met max retries so raise a DeadSite Exception here.
                raise ConnectionError, error_obj.message
             else

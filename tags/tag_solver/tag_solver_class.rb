@@ -52,7 +52,7 @@ class TagSolver
 
         case var.to_sym
             when :domain
-                domain_keys = [ :domain, :user, :pass, :server, :port ]
+                domain_keys = [ :domain, :username, :password, :server, :port ]
                 data.split(':').to_h( domain_keys )
         else
             data
@@ -84,9 +84,10 @@ class TagSolver
             tag_match = $1
             found = tag_in_vars?( tag_match )
 
-            if found
+            solved = if found
                 #replace the found value in tag_vars here
                 found
+
             else
                 #check to see if we have a tag handler method to solve this tag
                 #and run it for the tag answer, else just set this to
@@ -104,10 +105,11 @@ class TagSolver
                     tag_match
                 end
 
-                parse_default_tag_options( tag_solved )
-                
-
+                tag_solved
             end
+
+            parse_default_tag_options( solved )
+
         }
 
         @tag

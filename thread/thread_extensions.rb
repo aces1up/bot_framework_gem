@@ -10,6 +10,10 @@ class Thread
           self[:uuid]
       end
 
+      def clear_uuid()
+          self[:uuid] = nil
+      end
+
       def has_var_mediator?()
           key?(:vars)
       end
@@ -43,12 +47,28 @@ class Thread
 
       def set_var( var_hash, var_container=:temp, overwrite=true )
           raise EnviornmentError, "Cannot Add via Thread Enviornment Variable -- No Var Mediator Set for Thread!" if !has_var_mediator?
+          return if self[:vars].nil?
           self[:vars].add( var_hash, var_container, overwrite )
+      end
+
+      def set_status_terminated()
+          set_var( { :status => :terminated }, :site, true )
       end
 
       def teardown_thread_connections()
           return if !self[:conns]
           self[:conns].cleanup_all_connections
+      end
+      
+      def teardown_vars()
+          return if !self[:vars]
+          self[:vars] = nil
+      end
+
+      def teardown()
+          teardown_thread_connections
+          teardown_vars
+          clear_uuid
       end
 
 end

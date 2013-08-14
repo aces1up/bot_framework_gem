@@ -5,20 +5,43 @@ module LogHandler
     def msg_str( log_level, msg )
         "#{time} -- #{log_level.to_s.upcase}: #{msg}"
     end
-    
+
+    def drop_log_to_console( log_level, msg )
+        msg_output = msg_str( log_level, msg )
+        puts( msg_output )
+    end
+
     def do_log( log_level, msg, thread=nil )
 
         #check if we have a log handler for this thread.
         if ( log_handler = get_log_handler( thread ) )
 
             thread ||= Thread.current
-            return if !log_handler.respond_to?( :update_msg )
+            send_handler_errors = log_handler.respond_to?( :update_err )
 
-            log_handler.update_msg( msg_str( log_level, msg ), log_level, thread )
+            case 
+
+                when log_level == :refresh_gui
+
+                    if log_handler.respond_to?( :refresh_gui )
+                         log_handler.refresh_gui( msg )
+                    end
+
+                when ( log_level == :error and send_handler_errors )
+                     log_handler.update_err( msg_str( log_level, msg ), log_level, thread )
+
+                when ( log_level == :fatal and send_handler_errors )
+                     log_handler.update_err( msg_str( log_level, msg ), log_level, thread )
+
+                else
+
+                    if log_handler.respond_to?( :update_msg )
+                       log_handler.update_msg( msg_str( log_level, msg ), log_level, thread )
+                    end
+            end
 
         else
-            msg_output = msg_str( log_level, msg )
-            puts( msg_output )
+            drop_log_to_console( log_level, msg )
         end
         
     end
@@ -60,6 +83,14 @@ module LogHandler
     def fatal( msg="" )
         return if !log_level_met?( :fatal )
         do_log( :fatal, msg )
+    end
+
+    def refresh_gui( obj=nil )
+        do_log( :refresh_gui, obj )
+    end
+
+    def custom_log( msg, log_level )
+        do_log( log_level, msg )
     end
 
 end

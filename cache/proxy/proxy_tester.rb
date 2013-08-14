@@ -51,7 +51,9 @@ module ProxyTester
     end
 
     def wakeup_test_threads()
-        @test_threads.each do |thr| thr.wakeup end
+        @test_threads.each do |thr|
+          thr.wakeup
+        end
     end
 
     def add_test_thread()
@@ -89,7 +91,7 @@ module ProxyTester
                 rescue => err
                      err_msg = "[Proxy Cache Error]:  #{err.message}"
                      excep = CacheError.new( err_msg )
-                     excep.set_backtrace( caller )
+                     excep.set_backtrace( err.backtrace )
                      excep.report
                 end
             end

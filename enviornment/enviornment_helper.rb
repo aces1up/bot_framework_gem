@@ -45,6 +45,7 @@ module EnviornmentHelper
     def get_log_handler( thread=nil )
         #attempts to get gui_table obj via the :site container
         #var --> :gui_loc
+        return self.class if ( self.class.respond_to?(:update_err) or self.class.respond_to?( :update_msg ) )
         return nil if !has_var_mediator? and !thread
 
         handler = thread ? thread.get_var( :log_handler ) : get_env_var( :log_handler )

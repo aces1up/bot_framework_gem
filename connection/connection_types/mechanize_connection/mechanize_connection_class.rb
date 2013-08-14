@@ -13,7 +13,11 @@ class MechanizeConnection < Connection
         @conn.read_timeout = 10
         @conn.max_history  = 1
 
-        UseFiddlerProxy ? set_proxy('127.0.0.1:8888') : switch_proxy
+        #setup our initial proxy here
+
+
+
+        UseFiddlerProxy ? set_proxy( '127.0.0.1:8888' ) : switch_proxy
         set_user_agent
     end
     
@@ -97,8 +101,8 @@ class MechanizeConnection < Connection
         end
     end
 
-    def post( url, body, headers )
-        @conn.post(url, body, headers)
+    def post( url, body, headers={} )
+        @conn.post( url, body, headers )
     end
 
     def put( url, body, headers )

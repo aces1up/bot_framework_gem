@@ -51,7 +51,6 @@ class CaptchaImageFetcher
 
 
         rescue => err
-            alert_pop_err(err, "Captcha Fetch Error:")
             raise CaptchaError, ("[Solve Captcha] -- Unable to Retrieve Image: #{@image_url} -- Error: #{err.message}")
         end
 

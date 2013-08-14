@@ -8,7 +8,6 @@ class ArticleTagHandler
 
     include Enviornment
     include GlobalWrapper
-    include ArticleSanitizerModule
 
     def initialize( tag, tag_args={} )
 
@@ -37,7 +36,7 @@ class ArticleTagHandler
     def init_fetcher_object()
         @fetcher_obj = case global_var( :content_location )
             when :ondisk ;  OnDiskFetcher.new
-            when :dbase  ;  raise_exception( 'Dbase Content Fetching Not Implemented!' )
+            when :dbase  ;  DbaseFetcher.new
         else
             raise_exception( 'Cannot Determine Content Fetch Type Based on Global Setting : :content_location!' )
         end
@@ -45,21 +44,15 @@ class ArticleTagHandler
 
     def fetch_content()
         init_fetcher_object
-        self[:content] = @fetcher_obj.fetch
-    end
-
-    def spin_content()
-        self[:content] = Spinner.new.spin( self[:content] )
+        @fetcher_obj.fetch
     end
 
     def init_content()
 
       begin
 
-        fetch_content()
-        spin_content()      #<---- will first validate spintax and
-                            #<---- then spin content
-        sanitize_content()  #<---- seperate aticle_title, and article_text
+        self[:article_title], self[:article_text] = fetch_content()
+        self[:content_size] = self[:article_text].length
 
       rescue => err
           raise_exception( err.message )

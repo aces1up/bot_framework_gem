@@ -47,7 +47,7 @@ module DeathByCaptchaValidator
           parsed_result = parse_result(result)
           #puts "parsed result : #{parsed_result.inspect}"
 
-          has_balance?(parsed_result)
+          has_balance?( parsed_result )
 
       rescue Mechanize::ResponseCodeError => err
 

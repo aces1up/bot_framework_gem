@@ -23,12 +23,16 @@ class VerifyEmail < Action
         @err ? "[Error]: #{@err.class.to_s} -- #{@err.message}" : ""
     end
 
+    def server()
+        @creds[:server]
+    end
+
     def email_settings()
         {
            :address    => @creds[:server],
            :port       => @creds[:port],
-           :user_name  => @creds[:user],
-           :password   => @creds[:pass],
+           :user_name  => @creds[:username],
+           :password   => @creds[:password],
            :enable_ssl => false
         }
     end
@@ -60,10 +64,10 @@ class VerifyEmail < Action
         @pop.find( :what => :last, :count => 10, :order => :desc ).each do |message|
 
             #check to field
-            next if @email != message.to.first
+            if @email   ;  next if @email != message.to.first end
 
             #check subject field
-            if @subject ; next if !message.subject.include?( @subject )  end
+            if @subject ;  next if !message.subject.include?( @subject )  end
 
             @email_msg_obj = message
 
@@ -83,7 +87,9 @@ class VerifyEmail < Action
 
     def run()
 
-        debug("Using Email Login Data: #{@creds.inspect}")
+        raise EmailError, "Cannot Verify Email, No Credentials Set!" if !@creds
+        
+        debug("Using Email Login Data: #{email_settings.inspect}")
         info("Verifying Email [ Email: #{@email} ] -- [ Subject: #{@subject} ]")
 
         while ( !found_email? and !retry_met? )
@@ -96,14 +102,28 @@ class VerifyEmail < Action
                 do_retry
 
             rescue => err
-               cleanup
-               @err = err
-               warn( "Got Email Err: #{err.message}" )
 
-               if !retry_met?
-                  do_retry
-                  retry
+               cleanup
+
+               case err.class.to_s
+
+                  when  /POPAuthenticationError/
+                        raise EmailError, "Could Not Verify Email! -- Error : Authentication Failed"
+                  when  /ECONNREFUSED/
+                        raise EmailError, "Could Not Verify Email! -- Error : Could not Connect to Email Server : #{server}"
+                  when  /SocketError/
+                        raise EmailError, "Could Not Verify Email! -- Error : Could not Connect to Email Server : #{server}"
+
+               else
+                  @err = err
+                  warn( "Got Email Err: #{err.message}" )
+
+                  if !retry_met?
+                    do_retry
+                    retry
+                  end
                end
+               
             end
         end
 
@@ -113,7 +133,7 @@ class VerifyEmail < Action
             info("Found Email -- [ Subject: #{@email_msg_obj.subject} ]")
             self[:email_text] = @email_text
         else
-            raise ActionError, "Could Not Verify Email! #{dump_error}"
+            raise EmailError, "Could Not Verify Email! #{dump_error}"
         end
 
     ensure

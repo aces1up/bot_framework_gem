@@ -196,9 +196,26 @@ class EasyriderConnection < Connection
             wait_for_elements( found_elements, wait_method, wait_timeout )
         end
 
+        return nil if found_elements.empty?
+
+        ele = found_elements.first
+
+        case wait_method
+             when :wait_while_present
+                #if element still exists after waiting this actually failed
+                #as if shouldn't exist after waiting.  So we Delete the element
+                #which ultimately should return verify element error
+                #further up the stack.
+                ele.exists? ? nil : ele
+        else
+                begin !ele.exists? ? nil : ele ; rescue ; nil ; end
+        end
+
+=begin
         remove_elements( found_elements, wait_method )
         #found_elements.delete_if{ |ele| !ele.exists? }
         found_elements.empty? ? nil : found_elements.first
+=end
 
     end
 

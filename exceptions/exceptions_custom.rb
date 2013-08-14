@@ -1,5 +1,4 @@
 
-
 class FatalAppError < StandardError
 
     include BotFrameWorkModules
@@ -75,6 +74,11 @@ end
 
 class FatalConnectionError     < FatalAppError          ; end
 
+class HardwareError        < FatalAppError              ; end
+class ProcessHardwareError < HardwareError              ; end
+
+
+
 class TagSolverError    < GeneralAppException    ; end
 class CaptchaError      < GeneralAppException    
     def status_msg() ; :captcha_error end
@@ -87,8 +91,14 @@ class StartupError      < FatalAppError          ; end
 class DeadSite          < GeneralAppException    ; end
 class RawPostError      < GeneralAppException    ; end
 class ActionError       < GeneralAppException    ; end
+class EmailError        < GeneralAppException
+   def status_msg() ; :email_error end
+end
+
 class FunctionError     < GeneralAppException    ; end
-class ContentError      < GeneralAppException    ; end
+class ContentError      < GeneralAppException    
+    def status_msg() ; :content_error end
+end
 
 class LoginError        < GeneralAppException    
     def status_msg() ; :login_error end

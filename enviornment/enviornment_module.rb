@@ -1,6 +1,7 @@
 
 
 module Enviornment
+
     include EnviornmentHelper
 
     def init_vars( init_data={} )

@@ -4,11 +4,11 @@ module ArticleSanitizerModule
 
     def split_title_and_text()
 
-        text = self[:content]
+        text = @content
 
         lines = text.split( /\n|<br>|<br \/>/ )
 
-        self[:article_title] = lines.delete( lines.find{ |line| !line.empty? } )
+        title = lines.delete( lines.find{ |line| !line.empty? } )
 
         first_non_empty_index = lines.find_index{ |line| !line.empty? }
 
@@ -17,7 +17,9 @@ module ArticleSanitizerModule
             lines.compact!
         end
 
-        self[:article_text] = lines.join("\n")
+        body = lines.join("\n")
+
+        [ title, body ]
 
     end
 

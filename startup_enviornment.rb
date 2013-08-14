@@ -48,13 +48,7 @@ GlobalSettings.instance.merge_settings( DefaultBOTSettings )
 
 #Setup our Constants here from GlobalSettings
 GlobalSettings.instance.set_constants
-=begin
-GlobalSettings.instance.settings.each do |setting_var, val|
-    begin
-        Object.const_set( setting_var.to_s, val )
-    rescue ; end
-end
-=end
+
 
 class DoDownload
 
@@ -71,12 +65,14 @@ class DoDownload
 
     def start()
       begin
+
         init_vars
         set_log_handler( DownloaderLogHandler ) if defined?( DownloaderLogHandler )
         
-        url = 'http://50.116.27.156:8080/lwb_trainer/startup/'
-        puts "Downloading Dependancies from : #{url}"
+        url = 'http://50.116.27.156:8080/bot_deps/startup/'
+        info "Downloading Dependancies from : #{url}"
         DependancyDownloader.new( url, WorkingDirectory ).download
+
       rescue => err
           puts("Download Dependancy Error : #{err.message}\n#{err.backtrace.join("\n")}")
       end
@@ -89,5 +85,3 @@ class DoDownload
 end
 
 DoDownload.new
-
-

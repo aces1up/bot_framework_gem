@@ -11,9 +11,10 @@ module ConnectionWrapper
 
     attr_accessor :connection_class, :agent_var, :connection_options
 
-    def cleanup_connection()
-        return if @agent_var.nil?
-        conn_mediator.cleanup( @agent_var )
+    def cleanup_connection( conn_name=nil )
+        conn_name ||= @agent_var
+        return if conn_name.nil?
+        conn_mediator.cleanup( conn_name )
     end
 
     def current_connection_handle( conn_name=nil )

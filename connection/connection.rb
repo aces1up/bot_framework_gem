@@ -73,7 +73,7 @@ class Connection
         #on the connection
 
         #this class does not need to be subclassed by lower connection handlers.
-        proxy = get_proxy()
+        proxy = @use_local_proxy ? :local : get_proxy()
   
         #set a shared var so our gui can access it
         #proxy here would be a symbol if we are using :local

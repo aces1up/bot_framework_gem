@@ -20,7 +20,8 @@ module ProcessHelper
 
    def kill_process( process_name, kill_all=false )
        case os
-          when :win  ;   kill_process_win( process_name, kill_all )
+          when :win    ;   kill_process_win( process_name, kill_all )
+          when :linux  ;   raise ProcessHardwareError, "Cannot kill Process on Linux, Not Implemented!"
        end
    end
 

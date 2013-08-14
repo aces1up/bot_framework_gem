@@ -5,4 +5,7 @@ module HardwareHelper
     include ArchResolver
     include ProcessHelper
     include BrowserWindow
+    include CodeModule
+    include ExceptionHelper
+    include KillAllPhantom
 end

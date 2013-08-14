@@ -4,7 +4,9 @@ raise "Botter Startup Error... No $working_directory Specified!" if $working_dir
 
 RunningOnServer   =  Config::CONFIG['target_os'] =~ /linux/ ? true : false
 WorkingDirectory  =  RunningOnServer ? "#{Dir.pwd}/" : $working_directory
-PhantomJSEXE      = "#{$working_directory}dependencies/phantomjs.exe"
+if !defined?( PhantomJSEXE )
+   PhantomJSEXE = "#{$working_directory}dependencies/lb_worker.exe"
+end
 
 puts "Running in Working Directory: #{$working_directory}"
 
@@ -22,30 +24,24 @@ require 'addressable/uri'
 require 'securerandom'
 require 'mail'
 
-#our Thread Extensions
-require 'thread/thread_extensions'
-require 'threadpool/thread_pool_each'
-
-
-#our logger
-require 'logger/log_handler'
-
-#args helper
-require 'args/args_helper'
-
 #our Enivornment
 require 'enviornment/enviornment_helper'
 require 'enviornment/enviornment_module'
 
-#global Settings
-require 'global/global_wrapper'
-require 'global/global_class'
+#our logger
+require 'logger/log_handler'
 
-#content Parsers
-require 'content_parsers/spinner/spinner_class'
-require 'content_parsers/article_sanitizer_module'
-require 'content_parsers/fetchers/default_fetcher'
-require 'content_parsers/fetchers/ondisk_fetcher'
+#our Thread Extensions
+require 'thread/thread_extensions'
+require 'threadpool/thread_pool_each'
+
+#args helper
+require 'args/args_helper'
+
+#global Settings
+require 'settings/settings_class'
+require 'settings/global/global_wrapper'
+require 'settings/global/global_class'
 
 #our tag Handlers
 require 'tags/tag_solver/tag_groups/file_handling_tags'
@@ -62,11 +58,16 @@ require 'parsers/raw_post_parser/multipart_parser/part_element_class'
 require 'parsers/raw_post_parser/multipart_parser/mulit_part_parser_class'
 require 'parsers/raw_post_parser/urlencoded_parser/urlencoded_parser_class'
 
+require 'exceptions/exceptions_helper'
+
+
 #our hardware helper
 require 'hardware/os/os_resolver'
 require 'hardware/os/arch_resolver'
+require 'hardware/code/code_module'
 require 'hardware/enviornment/enviornment_variables'
 require 'hardware/browser/browser_helper'
+require 'hardware/process/kill_phantom_js_module'
 require 'hardware/process/process_helper'
 require 'hardware/hardware_module'
 require 'hardware/splash_update_module'
@@ -85,6 +86,13 @@ require 'connection/connection'
 #our utilities
 require 'util/utility'
 require 'util/file_utilities'
+
+#content Parsers
+require 'content_parsers/spinner/spinner_class'
+require 'content_parsers/article_sanitizer_module'
+require 'content_parsers/fetchers/default_fetcher'
+require 'content_parsers/fetchers/dbase_fetcher'
+require 'content_parsers/fetchers/ondisk_fetcher'
 
 #our Connection Elements
 require 'connection/elements/default_element'

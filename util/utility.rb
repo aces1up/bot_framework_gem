@@ -23,7 +23,6 @@ class Hash
 
       def set_constants()
           each do |key, val|
-
               begin  Object.send( :remove_const, key.to_s )   ; rescue ; end
               begin  Object.const_set( key.to_s, val )      ; rescue ; end
           end
@@ -41,11 +40,53 @@ class Hash
           replace( prepend_keys( pre_str ) )
       end
 
+      def find_key( key_search )
+          keys.find{ |key| key.to_s =~ Regexp.new( key_search.to_s )  }
+      end
+
       #def prepend_keys!( pre_str )
       #    self.each { |k, v| self[k] = v.upcase }
       #end
 
-    def to_rehash
+      def merge_existing!( other_hash )
+          #does merge operation but only if original hash
+          #has existing keys from other_hash
+          existing_hash = other_hash.select { |k| self.keys.include? k }
+          #puts "existing hash: #{existing_hash.inspect}"
+          puts "self merge: #{self.inspect}"
+          self.merge! existing_hash
+      end
+
+      def has_nested_hashes?()
+          self.any?{|key, val| val.is_a?( Hash )}
+      end
+
+      def rmerge_existing!(other)
+          other.each do |k,v|
+            if key?(k)
+              if self[k].is_a? Hash and v.is_a? Hash
+                self[k].rmerge_existing!(v)
+              else
+                self[k] = v
+              end
+            end
+          end
+      end
+
+      def rmerge!( other_hash, &block )
+
+        merge!( other_hash ) do |key, oldval, newval|
+
+            if oldval.class == self.class
+               block ? oldval.rmerge!( newval, &block ) : oldval.rmerge!( newval )
+            else
+               block ? block.yield( key, oldval, newval ) : newval
+            end
+
+        end
+      end
+
+      def to_rehash
         #collects all keys that have integers on the end of their
         #keys and creates a new subhash from them inside this hash
         self.inject( {} ) { | h, (key, val) |
@@ -59,9 +100,9 @@ class Hash
           end
           h
         }
-    end
+      end
 
-    def from_rehash()
+      def from_rehash()
         self.inject( {} ) { | h, (key, val) |
 
           if val.is_a?(Hash) and val.all_keys_are_integers?
@@ -71,7 +112,11 @@ class Hash
           end
           h
         }
-    end
+      end
+
+      def compress()
+          Base64.strict_encode64( self.to_yaml )
+      end
 end
 
 class String
@@ -86,6 +131,18 @@ class String
 
   def strip_non_letters
       self.gsub(/[^a-zA-Z]/i, ' ')
+  end
+
+  def strip_letters()
+      self.gsub(/[^0-9]/, '')
+  end
+
+  def strip_rn
+      self.gsub(/\r|\n/, '')
+  end
+
+  def strip_rn!
+      self.gsub!(/\r|\n/, '')
   end
 
   def remove_whitespace
@@ -136,6 +193,18 @@ class String
 
   def word_count
       self.split(' ').length
+  end
+
+  def decompress()
+      YAML::load( Base64.strict_decode64( self ) )
+  end
+
+  def strip_signature
+      self.gsub( '~~~lwb~~~', '')
+  end
+
+  def add_signature
+      "~~~lwb~~~#{self}"
   end
 
 end
@@ -192,6 +261,8 @@ def convert_val(value)
 end
 
 def deep_copy(o)   Marshal.load(Marshal.dump(o)) end
+
+def rand_bool() ; [true, false].sample end
 
 
 def param_to_arr(param)

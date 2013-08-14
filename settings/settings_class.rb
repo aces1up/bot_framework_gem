@@ -1,15 +1,25 @@
 
 
-class GlobalSettings
+class Settings
 
-    include Singleton
-
-    attr_reader :settings
+    attr_reader    :settings
+    attr_accessor  :settings_file
 
     def initialize()
-        @settings = {}
+        @settings      = {}
+        @loaded        = false  #<--- set to true when settings have been loaded
 
-        @loaded = false     #<--- set to true when settings have been loaded
+        @settings_file   = nil
+        @protect_hash    = {}
+    end
+
+    def set_file( filename )
+        @settings_file = filename
+    end
+
+    def use_protect_hash( hash )
+        #used for protecting variables held in @settings_file
+        @protect_hash = hash
     end
 
     def reload()
@@ -19,8 +29,10 @@ class GlobalSettings
 
     def load()
         return if @loaded
-        return if !File.exist?( SettingsFile )
-        @settings = load_yaml_from_file( SettingsFile )
+        return if !@settings_file
+
+        return if !File.exist?( @settings_file )
+        @settings = load_yaml_from_file( @settings_file )
         @settings = {} if !@settings.is_a?(Hash)
         @loaded = true
     end
@@ -37,10 +49,12 @@ class GlobalSettings
         }
 
         save()
+        set_constants()
     end
 
     def save()
-        File.open(SettingsFile, 'w') do |out| YAML.dump( @settings, out ) end
+        return if !@settings_file
+        File.open( @settings_file, 'w' ) do |out| YAML.dump( @settings, out ) end
     end
 
     def set_var( var, value, save_settings=false )
@@ -51,7 +65,7 @@ class GlobalSettings
 
     def protect_var(var)
 
-        max = GlobalSettingDefaults[ "#{var.to_s}_max".to_sym ]
+        max = @protect_hash[ "#{var.to_s}_max".to_sym ]
         return @settings[var] if max.nil?
 
         if @settings[var] > max
@@ -70,6 +84,13 @@ class GlobalSettings
         @settings.has_key?( var )
     end
 
+    def all_vars()
+        @settings.inject( {} ) do | result, ( var, val )| 
+            result[var] = get_var( var )
+            result
+        end
+    end
+
     def get_var(var)
         load()
         #1.  Check if var exists in settings
@@ -80,4 +101,5 @@ class GlobalSettings
     end
 
 end
+
 
