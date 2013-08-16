@@ -18,7 +18,6 @@ require 'singleton'
 require 'thread_safe'
 require 'yaml'
 require 'logger'
-require 'multipart_body'
 require 'cgi'
 require 'addressable/uri'
 require 'securerandom'
@@ -53,6 +52,7 @@ require 'tags/tag_solver/tags'
 require 'tags/tag_solver/tag_solver_class'
 
 #our Parsers
+require 'parsers/multipart'
 require 'parsers/raw_post_parser/packet_loader'
 require 'parsers/raw_post_parser/multipart_parser/part_element_class'
 require 'parsers/raw_post_parser/multipart_parser/mulit_part_parser_class'
@@ -60,32 +60,40 @@ require 'parsers/raw_post_parser/urlencoded_parser/urlencoded_parser_class'
 
 require 'exceptions/exceptions_helper'
 
-
-#our hardware helper
 require 'hardware/os/os_resolver'
 require 'hardware/os/arch_resolver'
 require 'hardware/code/code_module'
+require 'hardware/mysql/mysql_startup'
 require 'hardware/enviornment/enviornment_variables'
 require 'hardware/browser/browser_helper'
 require 'hardware/process/kill_phantom_js_module'
 require 'hardware/process/process_helper'
 require 'hardware/hardware_module'
-require 'hardware/splash_update_module'
-require 'hardware/extractor/extractor_class'
-require 'hardware/dependancies/checksum_class'
-require 'hardware/dependancies/directory_html_helper'
-require 'hardware/dependancies/directory_link'
-require 'hardware/dependancies/http_uri_stats'
-require 'hardware/dependancies/downloader_class'
 
 #Our Connections and Wrappers
 require 'connection/elements/element_wrapper'
 require 'connection/connection_wrapper'
 require 'connection/connection'
 
+
+
 #our utilities
 require 'util/utility'
 require 'util/file_utilities'
+
+#our hardware helper
+require 'hardware/splash_update_module'
+require 'hardware/extractor/extractor_class'
+require 'hardware/dependancies/downloader_wrapper'
+require 'hardware/dependancies/checksum_class'
+require 'hardware/dependancies/directory_html_helper'
+require 'hardware/dependancies/directory_link'
+require 'hardware/dependancies/http_uri_stats'
+require 'hardware/dependancies/downloader_class'
+
+
+
+
 
 #content Parsers
 require 'content_parsers/spinner/spinner_class'

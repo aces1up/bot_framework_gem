@@ -8,4 +8,5 @@ module HardwareHelper
     include CodeModule
     include ExceptionHelper
     include KillAllPhantom
+    include MySqlStartup
 end

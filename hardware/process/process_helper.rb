@@ -3,14 +3,13 @@
 module ProcessHelper
 
    def execute_process(execute_string)
+       createprocess = Win32API.new('kernel32','CreateProcess', 'LPLLLLLLPP', 'I')
 
-     createprocess = Win32API.new('kernel32','CreateProcess', 'LPLLLLLLPP', 'I')
+       startinfo = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+       startinfo = startinfo.pack('LLLLLLLLLLLLSSLLLL')
+       procinfo  = [0,0,0,0].pack('LLLL')
 
-     startinfo = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-     startinfo = startinfo.pack('LLLLLLLLLLLLSSLLLL')
-     procinfo  = [0,0,0,0].pack('LLLL')
-
-     createprocess.call( 0, execute_string, 0, 0, 0, 0, 0, 0, startinfo, procinfo )
+       createprocess.call( 0, execute_string, 0, 0, 0, 0, 0, 0, startinfo, procinfo )
    end
 
    def kill_process_win( process_name, kill_all=false )
@@ -25,58 +24,23 @@ module ProcessHelper
        end
    end
 
-   def kill_process_now( process_exe, process_multiple=false )
-        wmi = WIN32OLE.connect("winmgmts://")
-        processes = wmi.ExecQuery("select * from win32_process")
-        #puts("#{processes.inspect}")
-        for process in processes do
-          #puts "Name: #{process.Name}"
-          if process_exe.is_a?(Integer)
-              next if process.ProcessId != process_exe
-          else
-              next if !process.name.include?( process_exe )
-          end
-          #pid = process.ProcessId
-          Kernel.puts "killing process: #{process.ProcessId.inspect}"
-          process.Terminate
-          return if !process_multiple
-        end
+
+   def process_started_win?( process_exe )
+       command = "wmic process where(name=\"#{process_exe}\") get commandline"
+       puts "running process command: #{command}"
+       result = %x[#{command} 2>&1]
+       result.include?('No Instance') ? false : true
    end
 
-   def process_pids(process_exe)
-      #returns an array of all pids matching
-      #process_exe string
-      pids = []
-
-      wmi = WIN32OLE.connect("winmgmts://")
-        processes = wmi.ExecQuery("select * from win32_process")
-
-        for process in processes do
-            next if !process.name.include?(process_exe)
-            pids.push process.ProcessId
-        end
-
-        pids
+   def process_started?( process_exe )
+       case os
+          when :win    ;   [process_exe].flatten.any?{ |proc_exe| process_started_win?( proc_exe ) }
+          when :linux  ;   raise ProcessHardwareError, "Cannot Check Process Started on Linux, Not Implemented!"
+       end
    end
 
-   def process_started?(process_exe)
-      wmi = WIN32OLE.connect("winmgmts://")
-      processes = wmi.ExecQuery("select * from win32_process")
-      #puts("#{processes.inspect}")
-      for process in processes do
-        #return true if process.name.include?(process_exe)
-        if process_exe.is_a?(Integer) #<--- if Integer its the process PID we want to look for
-            return true if process.ProcessId == process_exe
-        else
-            return true if process.name.include?(process_exe)
-        end
+   def wait_for_process( process_exe, wait_for_start=true, retries=10, interval=0.1 )
 
-      end
-
-      false
-   end
-
-   def wait_for_process(process_exe, wait_for_start=true, retries=10, interval=0.1)
        retry_count = 0
        while retry_count <= retries do
           case wait_for_start

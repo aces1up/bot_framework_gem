@@ -49,8 +49,8 @@ GlobalSettings.instance.merge_settings( DefaultBOTSettings )
 #Setup our Constants here from GlobalSettings
 GlobalSettings.instance.set_constants
 
-
-class DoDownload
+=begin
+class DoDownloadBotter
 
     include BotFrameWorkModules
 
@@ -84,4 +84,10 @@ class DoDownload
 
 end
 
-DoDownload.new
+DoDownloadBotter.new
+=end
+
+include DownloaderBotWrapper
+url = 'http://50.116.27.156:8080/bot_deps/startup/'
+log_handler = defined?( DownloaderLogHandler ) ? DownloaderLogHandler : nil
+bot_download( log_handler, url )

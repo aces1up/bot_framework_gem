@@ -1,7 +1,7 @@
 
 require 'hardware/dependancies/http_uri_stats'
 
-Exclude_directories    = ['64', '32', 'win', 'linux', 'osx']
+Exclude_directories    = [ '64', '32', 'win', 'linux', 'osx' ]
 DownloadRetryInterval  = 5
 MaxDownloadRetry       = 60  #<--- 5 minutes
 
@@ -143,7 +143,7 @@ class DependancyDownloader
     def extract(filename)
         #extract file filename here ONLY if its a zip file
         return if File.extname( filename ) != '.zip'
-        Extractor.new.decompress( filename, true )
+        Extractor.new.decompress( filename )
     end
 
     def handle_download( remote, local )
