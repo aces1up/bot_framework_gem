@@ -49,45 +49,9 @@ GlobalSettings.instance.merge_settings( DefaultBOTSettings )
 #Setup our Constants here from GlobalSettings
 GlobalSettings.instance.set_constants
 
-=begin
-class DoDownloadBotter
-
-    include BotFrameWorkModules
-
-    def initialize()
-        @download_thread = nil
-
-        if DoDepenancyDownloads
-           @download_thread = Thread.new { start }
-           join()
-        end
-    end
-
-    def start()
-      begin
-
-        init_vars
-        set_log_handler( DownloaderLogHandler ) if defined?( DownloaderLogHandler )
-        
-        url = 'http://50.116.27.156:8080/bot_deps/startup/'
-        info "Downloading Dependancies from : #{url}"
-        DependancyDownloader.new( url, WorkingDirectory ).download
-
-      rescue => err
-          puts("Download Dependancy Error : #{err.message}\n#{err.backtrace.join("\n")}")
-      end
-    end
-
-    def join()
-        @download_thread.join
-    end
-
-end
-
-DoDownloadBotter.new
-=end
-
+#download our dependancies here
 include DownloaderBotWrapper
 url = 'http://50.116.27.156:8080/bot_deps/startup/'
-log_handler = defined?( DownloaderLogHandler ) ? DownloaderLogHandler : nil
+log_handler = defined?( BootLogHandler ) ? BootLogHandler : nil
 bot_download( log_handler, url )
+

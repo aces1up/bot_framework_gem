@@ -38,6 +38,7 @@ class DependancyDownloader
     end
 
     def directories( &block )
+
         current_directories = @dir.directories.dup
         current_directories.each do |dir|
 
@@ -49,6 +50,7 @@ class DependancyDownloader
         end
 
         @dir.cdup
+
     end
 
     def cleanup_download_error(filename)

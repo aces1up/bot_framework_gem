@@ -35,8 +35,9 @@ def file_count( dir )
     Dir["#{dir}*"].length
 end
 
-def dir_empty?(directory)
-    Dir["#{directory}*"].empty?
+def dir_empty?(dir)
+    dir = dir[-1,1] == '/' ? dir : "#{dir}/"
+    Dir["#{dir}*"].empty?
 end
 
 def dir_files_to_sym(directory)

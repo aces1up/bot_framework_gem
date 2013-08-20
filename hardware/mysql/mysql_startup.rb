@@ -23,12 +23,14 @@ module MySqlStartup
     end
     
     def kill_mysql_safe_way()
+        puts "killing mysql the safe way!"
         mysql_exe = "mysqladmin.exe"
         execute_string = "#{$working_directory}mysql/bin/#{mysql_exe} -u root shutdown"
         execute_process( execute_string )
     end
 
     def kill_mysql_badway()
+        puts "killing mysql the bad way!"
         kill_process( get_mysql_exe )
     end
 

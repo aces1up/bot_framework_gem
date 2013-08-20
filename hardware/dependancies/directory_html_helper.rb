@@ -59,4 +59,36 @@ class HTMLDirectoryHelper
         entries.find_all{|entry| !directory?(entry) }
     end
 
+    def cur_dir_sanitized()
+        #removed the remote_url portion from the
+        #@current directory
+        last_dir = @root_dir.split('/').last
+        reg_str  = ".*#{last_dir}\/"
+        @current_dir.gsub( Regexp.new( reg_str ), '' )
+    end
+
+    def each_dir( &block )
+
+        directories.each do |dir|
+            cd( dir )
+            yield cur_dir_sanitized, files
+            each_dir( &block )
+        end
+
+        cdup
+    end
+
+    def all_files()
+        glob = []
+        each_dir do |dir, files|
+            glob << files.map { |file| "#{dir}#{file}" }
+        end
+        glob.flatten
+    end
+
+    def all_files_with( root_dir )
+        #maps all files to the root directory
+        all_files.map{|file| "#{root_dir}#{file}" }
+    end
+
 end

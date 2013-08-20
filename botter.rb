@@ -89,6 +89,7 @@ require 'hardware/dependancies/checksum_class'
 require 'hardware/dependancies/directory_html_helper'
 require 'hardware/dependancies/directory_link'
 require 'hardware/dependancies/http_uri_stats'
+require 'hardware/dependancies/directory_mirror_class'
 require 'hardware/dependancies/downloader_class'
 
 

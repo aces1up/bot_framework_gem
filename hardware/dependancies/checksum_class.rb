@@ -17,7 +17,9 @@
                  #-- Delete checksum file on save finish
 
 class Checksum
-  
+
+   include Enviornment
+   include LogHandler
    include SplashUpdateModule
 
    CheckSumExcludeDirectories = ['dbase']
