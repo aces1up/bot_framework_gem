@@ -4,7 +4,7 @@ class BotDownloader
 
      def initialize( log_handler )
           init_vars
-          set_log_handler( log_handler )
+          set_log_handler( log_handler ) if log_handler
      end
 
      def raise_download_err( err )

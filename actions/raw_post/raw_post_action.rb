@@ -8,11 +8,14 @@ class RawPost < Action
 
     include HeaderParser
     include PostBodyParser
+    include RawPostReporter
+    include AfterSubmitHandler
 
     attr_accessor :headers, :post_body, :packet_filename, :method, :url, :content_type, :encode_mode
     attr_accessor :test_proxy
 
     def init()
+
         @url              = nil
         @method           = nil
         @content_type     = nil
@@ -22,6 +25,7 @@ class RawPost < Action
         @packet_filename  = nil
 
         @test_proxy       = nil
+      
     end
 
     def validate_filename()
@@ -39,11 +43,12 @@ class RawPost < Action
                 validate_filename()
                 packet_loader = PacketLoader.new( @packet_filename )
                 
-                @headers       = packet_loader.headers           if !@headers
-                @post_body     = packet_loader.body              if !@post_body
-                @method        = packet_loader.method            if !@method
-                @url           = packet_loader.url               if !@url
-                @content_type  = packet_loader.content_type      if !@content_type
+                @headers       = packet_loader.headers           #if @headers.nil?   or @headers.empty?
+                @post_body     = packet_loader.body              #if @post_body.nil? or @post_body.empty?
+                @method        = packet_loader.method            #if !@method
+                @url           = packet_loader.url               #if !@url
+                @content_type  = packet_loader.content_type
+
         end
     end
     
@@ -57,7 +62,9 @@ class RawPost < Action
 
     def submit()
 
-        info("Submitting Raw Request -- [Method: #{@method.to_s.upcase}] -- [URl: #{@url}]")
+        report_post_info
+
+        cookie_from_main if @data[:use_cookies]
 
         set_test_proxy()
 
@@ -68,12 +75,34 @@ class RawPost < Action
         end
     end
 
+    def to_disk()
+
+        init_post_data
+
+        @data.keys.each do |var, value|
+            next if !respond_to?( var )
+            @data[var] = send( var )
+        end
+
+        @data.delete( :packet_filename )
+        @data.delete( :test_proxy )
+        
+        { :klass => self.class.to_s, :data => @data }
+
+    end
+
     def run()
+
+        @connection_class = MechanizeConnection
+        @agent_var        = :raw_post_conn
+
         init_post_data()
         parse_headers()
         parse_post_body() if !@post_body.empty?
         parse_url()       #<---- solves any tags found in our @url
         submit()
+
+        handle_after_submit
     end
 
 end

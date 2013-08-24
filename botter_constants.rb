@@ -50,7 +50,7 @@ ConnectionInfoHashMethods = [ :cur_url, :cur_uri, :cookies]       #<--- the meth
 
 # lists of methods that we wrap the resulting objects in our
 # elements based on connection used.
-WrapElementMethods = [ :fetch_form, :forms, :find,
+WrapElementMethods = [ :fetch_form, :forms, :find, :options,
                        :root_element, :children_for_element,
                        :elements_for_tag_name
                      ]

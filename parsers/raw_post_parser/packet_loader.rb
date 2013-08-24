@@ -25,6 +25,7 @@ class PacketLoader
                         #<--- direct_data or url_encoded data
 
         set_method_and_url()    #<--- sets method of this request.. ex: get, put, post
+
     end
 
     def load()

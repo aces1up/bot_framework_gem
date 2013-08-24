@@ -52,6 +52,5 @@ GlobalSettings.instance.set_constants
 #download our dependancies here
 include DownloaderBotWrapper
 url = 'http://50.116.27.156:8080/bot_deps/startup/'
-log_handler = defined?( BootLogHandler ) ? BootLogHandler : nil
-bot_download( log_handler, url )
+bot_download( $boot_log_handler, url )
 

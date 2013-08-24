@@ -60,6 +60,10 @@ class Element
     def focus()
         raise FunctionNotImplemented
     end
+    
+    def options
+        raise FunctionNotImplemented
+    end
 
     def method_missing( method, *args)
 

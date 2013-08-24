@@ -55,6 +55,7 @@ class EasyriderConnection < Connection
     end
 
     def cookies()
+
         cookie_vars = [
          :name, :value, :version, :domain, :path, :secure, :comment, :max_age,
          :session, :created_at, :accessed_at
@@ -162,7 +163,15 @@ class EasyriderConnection < Connection
 
         start_element ||= @conn
         method        ||= :elements
-        wait_method     = nil if wait_method == :none
+        wait_method    = nil if wait_method == :none
+
+        # fixup our method here if its a special case
+        # for instance select list
+        method = case method
+            when :select ; :select_list
+        else
+            method
+        end
 
 
         #1.  method     -- should be div / span / input etc.. etc..
@@ -181,11 +190,10 @@ class EasyriderConnection < Connection
         #first setup our find string
 
         srch_string      = search_string( how, what, match_type )
+        debug("Connector using find.. Method: #{method.inspect} -- Search Query: #{srch_string}")
+
         found_elements   = start_element.send( method, how, srch_string )
-
-        debug("Connector using find..  Search Query: #{srch_string}")
-
-        found_elements = found_elements.respond_to?( :to_a ) ? found_elements.to_a : [ found_elements ]
+        found_elements   = found_elements.respond_to?( :to_a ) ? found_elements.to_a : [ found_elements ]
 
         debug("Found Elements [ #{found_elements.length} ]")
 

@@ -2,7 +2,7 @@
 
 module ProcessHelper
 
-   def execute_process(execute_string)
+   def execute_process( execute_string )
        createprocess = Win32API.new('kernel32','CreateProcess', 'LPLLLLLLPP', 'I')
 
        startinfo = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
@@ -10,6 +10,7 @@ module ProcessHelper
        procinfo  = [0,0,0,0].pack('LLLL')
 
        createprocess.call( 0, execute_string, 0, 0, 0, 0, 0, 0, startinfo, procinfo )
+
    end
 
    def kill_process_win( process_name, kill_all=false )

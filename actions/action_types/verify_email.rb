@@ -64,10 +64,10 @@ class VerifyEmail < Action
         @pop.find( :what => :last, :count => 10, :order => :desc ).each do |message|
 
             #check to field
-            if @email   ;  next if @email != message.to.first end
+            if @email   ;  next if @email.downcase != message.to.first.downcase end
 
             #check subject field
-            if @subject ;  next if !message.subject.include?( @subject )  end
+            if @subject ;  next if !message.subject.downcase.include?( @subject.downcase )  end
 
             @email_msg_obj = message
 
@@ -86,6 +86,9 @@ class VerifyEmail < Action
     end
 
     def run()
+
+        @email        =  self[:email]
+        @creds        =  self[:catchall_data]
 
         raise EmailError, "Cannot Verify Email, No Credentials Set!" if !@creds
         

@@ -13,7 +13,9 @@ module ElementWrapper
         #puts "got element type: #{klass.inspect}"
 
         case
-            when klass =~ /form/   ; :form
+            when klass =~ /form/     ; :form
+            when klass =~ /select/   ; :selectlist
+            when klass =~ /option/   ; :option
             #when klass =~ /input/  ; :input
         else
             :default

@@ -1,4 +1,26 @@
 
+def get_checksum( file )
+	if file.include?( '--' )
+		ext = File.extname( file )
+		file.split( '--' ).last.gsub( ext, '')
+	else
+		nil
+	end
+end
+
+def set_checksum( file )
+	sum   = Digest::SHA256.file( file ).hexdigest
+	ext   = File.extname( file )
+  base  = File.basename( file ).gsub( ext, '' )
+
+	"#{base}--#{sum}#{ext}"
+end
+
+def file_checksum( file )
+    Digest::SHA256.file( file ).hexdigest
+end
+
+
 
 def file_contents(filename)
     IO.read( filename )

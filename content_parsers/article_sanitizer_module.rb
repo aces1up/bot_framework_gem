@@ -19,7 +19,7 @@ module ArticleSanitizerModule
 
         body = lines.join("\n")
 
-        [ title, body ]
+        [ title.sanitize_title, body ]
 
     end
 
