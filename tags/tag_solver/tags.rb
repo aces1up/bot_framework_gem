@@ -34,8 +34,16 @@ module Tags
         get_content( :article_title )
     end
 
-    
 
+    #connection tags
+
+    def cookie_string
+        cookie_to_s
+    end
+    
+    def conn_url()
+        cur_url
+    end
 
 
   

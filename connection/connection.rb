@@ -73,13 +73,24 @@ class Connection
         #on the connection
 
         #this class does not need to be subclassed by lower connection handlers.
-        proxy = @use_local_proxy ? :local : get_proxy()
-  
+        proxy = case
+            when   @use_local_proxy   ;   :local
+            when   self[:proxy_data]  ;   
+                   debug("Switching Proxy using Saved proxy data: #{self[:proxy_data].inspect}")
+                   self[:proxy_data]         
+        else
+            debug("Getting Proxy From Cache")
+            get_proxy()
+        end
+
+        debug("Switching Proxy, New Proxy: #{proxy.inspect}")
+
         #set a shared var so our gui can access it
         #proxy here would be a symbol if we are using :local
         #for proxy
-        proxy_str = proxy.is_a?(Symbol) ? proxy : "#{proxy[:ip]}:#{proxy[:port]}"
-        add( { :proxy => proxy_str }, :site, true )
+        proxy_str = proxy.is_a?(Symbol) ? proxy.to_s : "#{proxy[:ip]}:#{proxy[:port]}"
+        add( { :proxy     => proxy_str }, :site, true )
+        add( { :cur_proxy => proxy     }, :site, true )
 
         set_proxy( proxy )
     end
@@ -118,7 +129,7 @@ class Connection
         raise FunctionNotImplemented
     end
 
-    def load_cookies(for_uri, cookies)
+    def load_cookies( for_uri, cookies )
         #loads cookies into connection with the cookie array hash cookies
         #and using the for_uri
         raise FunctionNotImplemented
@@ -126,6 +137,10 @@ class Connection
 
     def clear_cookies()
         raise FunctionNotImplemented
+    end
+
+    def cookie_to_s()
+        cookies.map{ |cookie| "#{cookie[:name]}=#{cookie[:value]}" }.join('; ')
     end
 
 

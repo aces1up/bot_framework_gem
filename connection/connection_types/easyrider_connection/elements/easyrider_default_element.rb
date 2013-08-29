@@ -73,4 +73,8 @@ class EasyriderDefault < Element
         @element.flash( num_times, interval )
     end
 
+    def drag_to( easy_rider_element )
+        @element.drag_and_drop_on( easy_rider_element.element )
+    end
+
 end

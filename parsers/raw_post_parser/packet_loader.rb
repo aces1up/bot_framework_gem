@@ -38,11 +38,11 @@ class PacketLoader
     end
 
     def set_headers()
-        @headers = @lines[0..@params_index-1]
+        @headers = @params_index.nil? ? @lines : @lines[0..@params_index-1]
     end
 
     def set_body()
-        @body = @lines[@params_index+1..-1].join("\n")
+        @body = @params_index.nil? ? "" : @lines[@params_index+1..-1].join("\n")
     end
 
     def store_data()

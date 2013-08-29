@@ -57,7 +57,9 @@ class RawPost < Action
     end
 
     def set_test_proxy()
-        set_proxy( @test_proxy ) if @test_proxy
+        return if !@test_proxy
+        info( "Setting Raw Post Test Proxy to : #{@test_proxy.inspect}" )
+        set_proxy( @test_proxy ) 
     end
 
     def submit()
@@ -103,6 +105,7 @@ class RawPost < Action
         submit()
 
         handle_after_submit
+
     end
 
 end

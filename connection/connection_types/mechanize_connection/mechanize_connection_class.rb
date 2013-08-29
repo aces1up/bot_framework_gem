@@ -15,8 +15,6 @@ class MechanizeConnection < Connection
 
         #setup our initial proxy here
 
-
-
         UseFiddlerProxy ? set_proxy( '127.0.0.1:8888' ) : switch_proxy
         set_user_agent
     end
@@ -37,6 +35,8 @@ class MechanizeConnection < Connection
     end
 
     def set_proxy( proxy )
+
+        debug("Mechanize Set Proxy Start -- Using: #{proxy.inspect}")
 
         @proxy = convert_proxy( proxy )
               

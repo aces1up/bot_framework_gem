@@ -12,13 +12,11 @@ module TagSolverHelper
 
     end
 
-    def solve_tag( tag, tag_args={}, add_tag_delimiter=false)
+    def solve_tag( tag, add_tag_delimiter=false)
 
-        tag_args ||= {}
         tag = "~~#{tag.to_s}~~" if add_tag_delimiter
 
-        solver = TagSolver.new( tag.to_s.dup, tag_args.dup )
-        solver.parse_tag
+        TagSolver.new.parse_tag( tag.to_s.dup )
 
     end
 end

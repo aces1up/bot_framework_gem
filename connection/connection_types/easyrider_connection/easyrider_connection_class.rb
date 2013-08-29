@@ -122,57 +122,81 @@ class EasyriderConnection < Connection
       end
     end
 
-    def wait_for_elements( elements, wait_method, wait_timeout )
+    def wait_for_elements( elements, wait_method, wait_timeout, validate_method )
+
         elements.each do |element|
+
             do_wait = case wait_method
                 when :wait_until_present
                         begin
-                            element.exists? ? false : true
+                            element.send( validate_method ) ? false : true
                         rescue Selenium::WebDriver::Error::StaleElementReferenceError => err
                             #warn "Got Wait Error: [Class #{err.class.to_s}] -- [Error: #{err.message}]"
                             true
                         end
                         
-                when :wait_while_present  ;  !element.exists? ? false : true
+                when :wait_while_present  ;  !element.send( validate_method ) ? false : true
             end
 
-            wait_for_element( element, wait_method, wait_timeout ) if do_wait
+            wait_for_element( element, wait_method, wait_timeout )  if do_wait
 
         end
     end
 
-    def remove_elements( elements, wait_method )
-        wait_method ||= :none
+    def find( method=nil, how=nil, what=nil, match_type=:broad, start_element=nil, wait_method=:none, wait_timeout=1, use_xpath=false, find_invisible=false, ele_index=nil )
 
-        elements.delete_if{ |ele|
+        element_no_find_count = 0
 
-             case wait_method
-                when :wait_while_present
-                  #if element still exists after waiting this actually failed
-                  #as if shouldn't exist after waiting.  So we Delete the element
-                  #which ultimately should return verify element error
-                  #further up the stack.
-                  ele.exists?
-             else
-                  !ele.exists?
-             end
-        }
-    end
-
-    def find( method=nil, how=nil, what=nil, match_type=:broad, start_element=nil, wait_method=:none, wait_timeout=1 )
-
+    begin
         start_element ||= @conn
-        method        ||= :elements
         wait_method    = nil if wait_method == :none
+
+        ele_index     ||= 0
+
+        validate_method = find_invisible ? :exists? : :present?
+
+        srch_method    = nil
+        srch_how       = how
+        srch_what      = what.dup
+
+
 
         # fixup our method here if its a special case
         # for instance select list
-        method = case method
+        srch_method = case method
             when :select ; :select_list
         else
             method
         end
 
+        #fixup our what variable if we are using xpath search or some 
+        #other weird method 
+
+        if use_xpath
+
+            debug("Determining XPATH Query:")
+
+                constructor_args = {
+
+                    :method  =>  method,
+                    :how     =>  how,
+                    :what    =>  what,
+                    :exact   =>  match_type == :broad ? false : true
+
+                }
+
+                xpath_query   = XpathConstructor.new( constructor_args ).build_query
+                debug( "Using Xpath Query: #{xpath_query}" )
+
+
+            srch_method  =  :elements
+            srch_how     =  :xpath
+            srch_what    =  xpath_query
+
+        end
+
+        #default method to :elements if it hasn't been set yet.
+        srch_method      ||= :elements
 
         #1.  method     -- should be div / span / input etc.. etc..
         #                  If no method specified we use elements
@@ -189,24 +213,28 @@ class EasyriderConnection < Connection
 
         #first setup our find string
 
-        srch_string      = search_string( how, what, match_type )
-        debug("Connector using find.. Method: #{method.inspect} -- Search Query: #{srch_string}")
+        srch_string      = search_string( srch_how, srch_what, match_type )
+        debug("Connector using find.. Method: #{srch_method.inspect} -- Search Query: #{srch_string}")
 
-        found_elements   = start_element.send( method, how, srch_string )
+        found_elements   = start_element.send( srch_method, srch_how, srch_string )
         found_elements   = found_elements.respond_to?( :to_a ) ? found_elements.to_a : [ found_elements ]
 
         debug("Found Elements [ #{found_elements.length} ]")
+
+        raise NoElementFound, "No Elements Found" if found_elements.empty?
 
         #handle waiting for our elements here
         #if we have waits specified
         if wait_method
             debug("Waiting for Elements [ #{found_elements.length} ] --- [ Wait Method: #{wait_method}, Timeout: #{wait_timeout} ] ")
-            wait_for_elements( found_elements, wait_method, wait_timeout )
+            wait_for_elements( found_elements, wait_method, wait_timeout, validate_method )
         end
 
-        return nil if found_elements.empty?
-
-        ele = found_elements.first
+        ele   = found_elements[ ele_index ]
+        debug("Using Element index : #{ele_index}") if ele
+        ele   ||= found_elements.first
+       
+        #ele = found_elements.first
 
         case wait_method
              when :wait_while_present
@@ -214,9 +242,9 @@ class EasyriderConnection < Connection
                 #as if shouldn't exist after waiting.  So we Delete the element
                 #which ultimately should return verify element error
                 #further up the stack.
-                ele.exists? ? nil : ele
+                ele.send( validate_method ) ? nil : ele
         else
-                begin !ele.exists? ? nil : ele ; rescue ; nil ; end
+                begin !ele.send( validate_method ) ? nil : ele ; rescue ; nil ; end
         end
 
 =begin
@@ -224,9 +252,31 @@ class EasyriderConnection < Connection
         #found_elements.delete_if{ |ele| !ele.exists? }
         found_elements.empty? ? nil : found_elements.first
 =end
+    rescue NoElementFound => err
+
+        debug("No Elements found... ")
+
+        if wait_method
+
+            element_no_find_count += 1
+
+            if element_no_find_count < wait_timeout
+
+                debug("No Elements Found -- Retrying : #{element_no_find_count} / #{wait_timeout} ")
+                sleep(1)
+                retry
+
+            else
+                debug("Could not find Elements after waiting...")
+                nil
+            end
+
+        else
+            nil   #<--- return nil here as we are not going to wait for element
+        end
 
     end
 
 
-
+    end
 end

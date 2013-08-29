@@ -51,52 +51,5 @@ PhantomJSEXE = 'c:/temp/phantomjs.exe'
 
 
 
-class LoginTest
-
-    include BotFrameWorkModules
-    include HardwareHelper
-
-     def initialize()
-        @connection_class = EasyriderConnection
-        #@connection_options = {
-        #      :browser_type => :firefox
-        #}
-     end
-
-     def test()
-
-        #kill_process(  'phantomjs.exe', true )
-        
-        #result = `ping www.google.com`
-        #puts result.inspect
-        #puts "os : #{os.inspect}"
-
-        init_vars
-        get('http://weebly.com')
-        puts html
-        #hard_kill
-
-        #puts ProfileData.new.get_profile.inspect
-        #var = global_var( :content_location )
-        #puts "location : #{var.inspect}"
-
-        #puts self[:article_title].inspect
-        #puts self[:article_text].inspect
-        #title  = solve_tag( '~~article_title~~' )
-        #title2 = solve_tag( '~~article_title~~' )
-        #puts "title #{title}"
-        #make sure title2 == title should not try and
-        #get a new title
-        #puts "title2: #{title2}"
-        #puts "text : #{solve_tag('~~article_text~~')}"
-
-
-
-     end
-end
-
-LoginTest.new.test
-puts "done"
-
 
 

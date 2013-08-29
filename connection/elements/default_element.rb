@@ -69,7 +69,7 @@ class Element
 
         if @element.respond_to?( method )
 
-            warn("Running No Implmented Method on Element : #{self.obj_info} -- #{method.inspect}")
+            warn("Running Non Implemented Method on Element : #{self.obj_info} -- #{method.inspect}")
             @element.send( method, *args )
 
         else

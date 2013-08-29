@@ -5,25 +5,27 @@ class VerifyElement < Action
     def init()
         init_element_vars()
     end
-=begin
-    #handle waiting for our elements here
-        #if we have waits specified
-        if wait_method
-            debug("Waiting for Elements [ #{found_elements.length} ] --- [ Wait Method: #{wait_method}, Timeout: #{wait_timeout} ] ")
-            wait_for_elements( found_elements, wait_method, wait_timeout )
-        end
-=end
+
     def run()
 
         @what = solve_tag( @what )
-        found = find( @method, @how, @what, @match_type, @start_element, @wait_mode, @timeout )
+        found = find( @method, @how, @what, @match_type, @start_element, @wait_mode, @timeout, @use_xpath, @find_invisible, @ele_index )
 
         if found
-            info("Found Element Using: #{dump_element}")
+          
+            info("Found Element Using : #{dump_element}")
+            #debug("Found Element Text : #{found.text}")
+
         else
-            raise ActionError, "Cannot verify Element: #{dump_element} on Page!"
+            if @raise_error
+                raise ActionError, "Cannot verify Element: #{dump_element} on Page!"
+            else
+                info("Cannot Verify Element : #{dump_element} -- Not Raising Error...")
+                nil
+            end
         end
-        
+
+
         found
 
     end

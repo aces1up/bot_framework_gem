@@ -70,7 +70,7 @@ class CaptchaImageFetcher
         return :direct_url     if @args[:use_url]
         return :captcha_coords if @args[:image_coords]
         return :image_search   if @args.has_key?(:search_for) and !@args[:search_for].empty?
-        return :recaptcha      if @args[:is_recaptcha]
+        return :recaptcha      if @args[:is_recaptcha] #or @args[:public_key]
         :unknown
     end
 

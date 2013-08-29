@@ -15,13 +15,31 @@ module NormalImageFetcher
     def store_normal_image()
         info("[Captcha Solver] -- Determining Captcha Image Location")
 
-        @image_url = get_normal_image_url()
+        retry_count = 0
 
-        if !@image_url then
-            raise CaptchaError, "[Captcha Solver] -- Could not Determine Captcha Image Location!"
-        else
-            info("[Captcha Solver] -- Image Location: #{@image_url.inspect}")
-            store_image()
+        begin
+
+            @image_url = get_normal_image_url()
+
+            if !@image_url then
+                raise CaptchaImageFetchError, "[Captcha Solver] -- Could not Determine Captcha Image Location!"
+            else
+                info("[Captcha Solver] -- Image Location: #{@image_url.inspect}")
+                store_image()
+            end
+            
+        rescue CaptchaImageFetchError => err
+            if retry_count < 5 
+              
+                retry_count += 1
+                info("Count not Determine Image Location... Retrying.. #{retry_count} / 5")
+                sleep(1)
+                retry
+                
+            else
+                raise
+            end
         end
+
     end
 end

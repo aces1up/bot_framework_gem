@@ -12,11 +12,13 @@ module RecaptchaImageFetcher
 
         return @args[:public_key] if @args[:public_key]
 
+        debug("Searching HTML For Publi Key, HTML Length: #{html.length}")
+
         RecaptchaPublicKeySearchers.each do |regex|
-            result = html.scan(regex)
-            info "captcha image public key search: result: #{result.inspect}"
-            next if !result or result.empty?
-            return result[0][0]
+            html =~ regex
+            info "captcha image public key search: result: #{$1.inspect}"
+            next if !$1
+            return $1
         end
 
         false
@@ -51,7 +53,9 @@ module RecaptchaImageFetcher
     end
 
     def store_recaptcha_image()
+
         @public_key = get_recaptcha_public_key
+
         if !@public_key then
             raise CaptchaError, "[Captcha Solver] -- Could not Determine Recaptcha Public Key!"
         else

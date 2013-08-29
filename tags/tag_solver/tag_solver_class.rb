@@ -4,36 +4,30 @@ class TagSolver
 
     include Enviornment
     include Tags
+    include TimeTags
     include TagSolverHelper
     include DefaultTagHandler
+    include ConnectionWrapper
 
-    def initialize( tag=nil, tag_args={} )
+    def initialize()
 
-        @tag      = tag
-        @tag_args = tag_args
-
-        init_tag_args if tag  #<--- need to fixup tag if this tag solver was not created via the hint solver
+        @tag_args = {}
 
     end
 
-    def fixup_tag( tag_raw )
+    def set_tag_args( tag_raw )
         tag, tag_args_raw = *tag_raw.split('?',2)
         @tag_args.merge!( tag_args_raw.split('?').map{ |raw_param| param_to_hash(raw_param) }.reduce Hash.new, :merge )
-        "~~#{tag}~~"
+        tag
     end
 
-    def init_tag_args()
+    def init_tag( tag_match )
         #  Will split the Tag and Tag_args if they were specified directly in the tag
         #  tag = 'rand_file?file=random_platform_site?other_arg=test'
-        return if !@tag.include?('?')
 
-        @tag.gsub!(/~~(.+?)~~/) { |tag|
-            tag_match = $1
-            #if this tag_match / subtag in tag string
-            #does not have tag_args -- EX no ? then just return
-            #the tag_match, else we run fixup_tag to record the tag_args
-            tag_match.include?('?') ? fixup_tag( tag_match ) : "~~#{tag_match}~~"
-        }
+        @tag_args = {}   #<---- clear out any previous args
+        tag_match.include?('?') ? set_tag_args( tag_match ) : tag_match
+
     end
 
     def tag_in_vars?(tag)
@@ -42,7 +36,7 @@ class TagSolver
         self[tag.to_sym] 
     end
 
-    def get_bio_var(var)
+    def get_bio_var( var )
         #goes out to our bio files and gets a random
         #element from the file that our var corresponds to
         #ex.  var == :first_name  --  Filename : bio/first_name.data
@@ -77,11 +71,13 @@ class TagSolver
 
     end
     
-    def parse_tag()
+    def parse_tag( tag_str )
 
-        @tag.gsub!( /~~(.+?)~~/ ) { |tag|
+        tag_str.gsub!( /~~(.+?)~~/ ) { |tag|
 
             tag_match = $1
+            tag_match = init_tag( tag_match )
+
             found = tag_in_vars?( tag_match )
 
             solved = if found
@@ -112,7 +108,7 @@ class TagSolver
 
         }
 
-        @tag
+        tag_str
     end
 
 end

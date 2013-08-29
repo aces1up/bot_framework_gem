@@ -42,8 +42,13 @@ require 'settings/settings_class'
 require 'settings/global/global_wrapper'
 require 'settings/global/global_class'
 
+require 'connection/elements/element_wrapper'
+require 'connection/connection_wrapper'
+
+
 #our tag Handlers
 require 'tags/tag_solver/tag_groups/file_handling_tags'
+require 'tags/tag_solver/tag_groups/time_tags'
 require 'tags/tag_solver/tag_groups/article_tags/article_tag_handler'
 require 'tags/tag_solver/tag_groups/bio_tags'
 require 'tags/tag_solver/tag_groups/default_tags_handler'
@@ -52,6 +57,7 @@ require 'tags/tag_solver/tags'
 require 'tags/tag_solver/tag_solver_class'
 
 #our Parsers
+require 'parsers/xpath_constructor/xpath_constructor_class'
 require 'parsers/multipart'
 require 'parsers/raw_post_parser/packet_loader'
 require 'parsers/raw_post_parser/multipart_parser/part_element_class'
@@ -71,8 +77,6 @@ require 'hardware/process/process_helper'
 require 'hardware/hardware_module'
 
 #Our Connections and Wrappers
-require 'connection/elements/element_wrapper'
-require 'connection/connection_wrapper'
 require 'connection/connection'
 
 
@@ -193,6 +197,7 @@ require 'actions/action_types/verify_email'
 require 'actions/action_types/modify_variable'
 require 'actions/action_types/verify_element'
 require 'actions/action_types/save_raw_post_variable'
+require 'actions/action_types/drag_and_drop'
 require 'actions/raw_post/header_parser_module'
 require 'actions/raw_post/raw_post_reporter'
 require 'actions/raw_post/after_submit_handler'

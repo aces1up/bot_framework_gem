@@ -61,7 +61,7 @@ class VerifyEmail < Action
         info("Checking Email -- Retry [ #{@retry_count} / #{@email_retry} ]")
 
         #returns found email if we match
-        @pop.find( :what => :last, :count => 10, :order => :desc ).each do |message|
+        @pop.find( :what => :last, :count => 20, :order => :desc ).each do |message|
 
             #check to field
             if @email   ;  next if @email.downcase != message.to.first.downcase end
@@ -75,6 +75,11 @@ class VerifyEmail < Action
             @email_text.gsub!( /\r/, '' )
             @email_text.gsub!( /\n/, '' )
 
+
+            if @data[:decode_email]
+                @email_text = message.parts.map{ |part| part.body.decoded }.join("\n\n")
+            end
+        
             return
         end
     end

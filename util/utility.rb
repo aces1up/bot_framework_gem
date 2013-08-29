@@ -125,6 +125,10 @@ class String
       self.include?(' ') ? self.split(' ')[0..num_words].join(' ') : self
   end
 
+  def escape_double_quotes()
+      self.gsub(/\"/, '\"')
+  end
+
   def is_integer?
       !!(self =~ /^[-+]?[0-9]+$/)
   end

@@ -3,10 +3,16 @@ class FatalAppError < StandardError
 
     include BotFrameWorkModules
 
+    attr_accessor :klass
+
     def self.log_file()
         #returns the location of this log_file and creates if it
         #doesn't exist.
         "#{LogsDir}BotFatalError.log"
+    end
+
+    def set_klass( klass )
+        @klass = klass
     end
 
     def self.init_log()
@@ -23,7 +29,7 @@ class FatalAppError < StandardError
     def status_msg() ; :fatal ; end
 
     def msg()
-        "[ Error: #{message} ]\n[Backtrace: #{backtrace.join("\n")}]"
+        "[ Exception Error: Klass #{@klass.to_s} : Msg: #{message} ]\n[Backtrace: #{backtrace.join("\n")}]"
     end
 
     def report_gui( thread )
@@ -83,6 +89,8 @@ class TagSolverError    < GeneralAppException    ; end
 class CaptchaError      < GeneralAppException    
     def status_msg() ; :captcha_error end
 end
+class CaptchaImageFetchError      < CaptchaError ; end
+
 class CacheError                 < FatalAppError          ; end
 class FunctionNotImplemented     < FatalAppError          ; end
 
@@ -94,6 +102,9 @@ class ActionError       < GeneralAppException    ; end
 class EmailError        < GeneralAppException
    def status_msg() ; :email_error end
 end
+
+class NoElementFound        < GeneralAppException ; end
+
 
 class FunctionError     < GeneralAppException    ; end
 class ContentError      < GeneralAppException    

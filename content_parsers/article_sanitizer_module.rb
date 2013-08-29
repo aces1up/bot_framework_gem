@@ -17,7 +17,7 @@ module ArticleSanitizerModule
             lines.compact!
         end
 
-        body = lines.join("\n")
+        body = lines.join("<br />")
 
         [ title.sanitize_title, body ]
 

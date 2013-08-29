@@ -32,6 +32,7 @@ module PostBodyParser
             #need to handle direct request here, and use the packet
             #loader to detect of post_body is encoded or not
             #or use the action var @encode_mode
+            @post_body = solve_tag( @post_body.to_s )
         end
 
 

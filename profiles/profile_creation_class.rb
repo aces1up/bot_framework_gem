@@ -29,7 +29,7 @@ class ProfileData
     end
 
     def get_profile_var( var )
-        solve_tag( var, nil, true )
+        solve_tag( var, true )
     end
 
     def generate

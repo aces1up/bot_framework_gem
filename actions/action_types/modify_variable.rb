@@ -28,7 +28,7 @@ class ModifyVariable < Action
         var = @data[:modify_variable]
         replace_val = @data[:replace_with].empty? ? '' : solve_tag( @data[:replace_with] )
 
-        debug(" Replacing With : #{replace_val.inspect}" )
+        debug("Replace Method: #{replace_method.inspect} -- Replacing With : #{replace_val.inspect}" )
 
         self[ var ].send( replace_method, reg_obj, replace_val )
 
@@ -43,8 +43,11 @@ class ModifyVariable < Action
         var = @data[:modify_variable]
 
         self[ var ] = case @data[ :conversion_mode ]
-            when :to_url        ; self[ var ].downcase.remove_whitespace.gsub( ' ', '-' )
-            when :url_decode    ; CGI::unescape( self[ var ] )
+
+            when :to_url           ; self[ var ].downcase.remove_whitespace.gsub( ' ', '-' )
+            when :url_decode       ; CGI::unescape( self[ var ] )
+            when :remove_
+
         else
             self[ var ]  #<--- being paranoid here
         end
